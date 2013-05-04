@@ -26,12 +26,14 @@ client.twitter.photo(id=123) //media
 
 client.facebook.feed(user="jhgaylor") //wall
 client.youtube.feed(user="jhgaylor") //activities
-
+client.twitter.feed(user="jhgaylor") // timeline
 
 */
 //inclue npm packages
 var $;
 var _ = require('underscore');
+var twitterlib = require('twitterlib');
+var facebooklib = require('fb');
 
 //include required client libraries
 var FacebookSDK = function () {};   // https://developers.facebook.com/docs/reference/javascript/
@@ -91,17 +93,41 @@ var UltimaSDK = (function () {
             each submodule should also return custom errors. the original error may be attached
             to the custom error. the errors are defined on genericApiAdapter in order to provide
             consistant errors across apis.
+
+            have to come up with a way to paginate consistantly...
             */
             //lazy loading!
-            _facebook = _facebook || new FacebookSDK();
+            _facebook = _facebook || facebooklib;
+
             var client = new UltimaSDK.genericApiAdapter();
-            client.key = "value";
-            client.key2 = "value2";
+
+            client.feed = function (username) {
+                //we need an access token to make a call to /feed, so we need a dev token.
+                var url = username+"/feed?access_token=BAACEdEose0cBAI92HfWY2V4ij9jbAulaZCnUZAD3bH4jgCyFp801leui5BhVEbzZBk7Y3BZBP8C332DZCB3XIZA3JKQ3BfiPWVJRvmC8y5Cz3WraObrgYNdbx8txkNzqqRmfYshcPKK03vRF6FjUerArOZBPBxvrS1zMAKZBhwLkhliRUfa6XJoOjYamfg5Xe3jZAMCxCc7lpvyApVURrw7fxgrP0iVGP0i0ZD";
+                _facebook.api(url, function (res) {
+                  if(!res || res.error) {
+                   console.log(!res ? 'error occurred' : res.error);
+                   return;
+                  }
+                  console.log(res);
+                });
+            };
+
+            client.profile = function (username) {
+                var url = username;
+                _facebook.api(url, function (res) {
+                  if(!res || res.error) {
+                   console.log(!res ? 'error occurred' : res.error);
+                   return;
+                  }
+                  console.log(res);
+                });
+            };
             return client;
         }());
 
         this.twitter = (function () {
-            _twitter = _twitter || new TwitterSDK();
+            _twitter = _twitter || twitterlib;
             var client = new UltimaSDK.genericApiAdapter();
             client.posts = function () {
                 /*
@@ -117,12 +143,10 @@ var UltimaSDK = (function () {
                 return _twitter.search("statuses", {'from': author});
             };
 
-            client.photos = function () {
-                return _twitter.search("statuses", {'id': id, 'fields': ["photo"]});
-            };
-
-            client.profile = function () {
-                return _twitter.search("profile", {'user': author});
+            client.feed = function (username) {
+                twitterlib.timeline(username, function (tweets, options){
+                    console.log(tweets);
+                });
             };
 
             return client;
@@ -158,3 +182,5 @@ var UltimaSDK = (function () {
 
 api = new UltimaSDK();
 console.log(api);
+api.twitter.feed("jhgaylor");
+api.facebook.feed("jhgaylor");
