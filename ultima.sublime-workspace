@@ -1,0 +1,908 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Ul",
+				"UltimaSDK"
+			],
+			[
+				"priva",
+				"privateVar"
+			],
+			[
+				"Int",
+				"Investigations"
+			],
+			[
+				"Re",
+				"RequestContext  (unknown)"
+			],
+			[
+				"ren",
+				"render_to_response"
+			],
+			[
+				"dj",
+				"djview	views.py - render_to_response"
+			],
+			[
+				"fon",
+				"font-weight"
+			],
+			[
+				"album",
+				"albumdetails"
+			],
+			[
+				"tmp",
+				"tmp_date_params"
+			],
+			[
+				"traf",
+				"traffic_chart_container"
+			],
+			[
+				"traff",
+				"traffic_data"
+			],
+			[
+				"dja",
+				"djAdmin	admin.py boilerplate"
+			],
+			[
+				"Man",
+				"ManyToManyField"
+			],
+			[
+				"djam",
+				"djAdmin	admin.py boilerplate"
+			],
+			[
+				"djm",
+				"djGenericModel	Generic model"
+			],
+			[
+				"pro",
+				"property"
+			],
+			[
+				"squa",
+				"square_width"
+			],
+			[
+				"fill",
+				"fillStyle"
+			],
+			[
+				"pr",
+				"property_header_height"
+			],
+			[
+				"sq",
+				"square_width"
+			],
+			[
+				"squ",
+				"square_height"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"height",
+				"square_height"
+			],
+			[
+				"square",
+				"square_width"
+			],
+			[
+				"draw",
+				"drawText"
+			],
+			[
+				"strok",
+				"strokeText"
+			],
+			[
+				"get",
+				"get_rules_for_sandy_import"
+			],
+			[
+				"creat",
+				"create_datapoint"
+			],
+			[
+				"val",
+				"validateRules"
+			],
+			[
+				"djmo",
+				"djGenericModel	Generic model"
+			],
+			[
+				"tok",
+				"tokenize"
+			],
+			[
+				"acc",
+				"account"
+			],
+			[
+				"accS",
+				"accSetting"
+			],
+			[
+				"run",
+				"run_script"
+			],
+			[
+				"re",
+				"restart_state"
+			],
+			[
+				"sc",
+				"script_name"
+			],
+			[
+				"cu",
+				"current"
+			],
+			[
+				"hi",
+				"hideOldPoints"
+			],
+			[
+				"SIM",
+				"SIM_LENGTH"
+			],
+			[
+				"AB",
+				"ABS_MIN_TIME"
+			],
+			[
+				"Da",
+				"DataController"
+			],
+			[
+				"curr",
+				"currentStep"
+			],
+			[
+				"new",
+				"new_points"
+			],
+			[
+				"min",
+				"min_time"
+			],
+			[
+				"ABS",
+				"ABS_MIN_TIME"
+			],
+			[
+				"SIM_",
+				"SIM_LENGTH"
+			],
+			[
+				"se",
+				"secondsPerStep"
+			],
+			[
+				"uncl",
+				"unclusterMap"
+			],
+			[
+				"mark",
+				"markerCluster"
+			],
+			[
+				"query",
+				"query_twitter"
+			],
+			[
+				"djad",
+				"djAdminModel	admin.py ModelAdmin"
+			],
+			[
+				"blog",
+				"blog_data"
+			],
+			[
+				"tags",
+				"tags_pattern"
+			],
+			[
+				"body_",
+				"body_end"
+			],
+			[
+				"data",
+				"datapoints"
+			],
+			[
+				"rule_",
+				"rule_strings"
+			],
+			[
+				"djA",
+				"djAdminModel	admin.py ModelAdmin"
+			],
+			[
+				"pat",
+				"pathjoin	pathjoin"
+			],
+			[
+				"djim",
+				"djimport	urls.py - import your.view"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "ultima.js",
+			"settings":
+			{
+				"buffer_size": 5683,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 375.0,
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packare",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"node",
+				"Nodejs::User File Settings"
+			],
+			[
+				"synjs",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"syntp",
+				"Set Syntax: Python"
+			],
+			[
+				"js",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"synpy",
+				"Set Syntax: Python"
+			],
+			[
+				"insa",
+				"Package Control: Install Package"
+			],
+			[
+				"synru",
+				"Set Syntax: Ruby"
+			],
+			[
+				"view",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"open",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"prefer",
+				"Preferences: Settings - Default"
+			],
+			[
+				"projec",
+				"Project: Save As"
+			],
+			[
+				"syntpy",
+				"Set Syntax: Python"
+			],
+			[
+				"soupyt",
+				"Set Syntax: Regular Expressions (Python)"
+			],
+			[
+				"synpyt",
+				"Set Syntax: Python"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"fetch",
+				"Fetch: Manage"
+			],
+			[
+				"",
+				"Fetch: Manage"
+			],
+			[
+				"fetc",
+				"Fetch: Manage"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"htm",
+				"Set Syntax: HTML"
+			],
+			[
+				"synzen",
+				"Set Syntax: ZenCoding"
+			],
+			[
+				"syn",
+				"Set Syntax: HTML"
+			],
+			[
+				"syntht",
+				"Set Syntax: HTML"
+			],
+			[
+				"synht",
+				"Set Syntax: HTML (Tcl)"
+			],
+			[
+				"insta	",
+				"Package Control: Install Package"
+			],
+			[
+				"snippet",
+				"Snippet: New Class"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"brow",
+				"Preferences: Browse Packages"
+			],
+			[
+				"min",
+				"View: Toggle Minimap"
+			],
+			[
+				"side",
+				"View: Toggle Side Bar"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"jas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"jst",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"syntax java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"java",
+				"Set Syntax: Java"
+			],
+			[
+				"synta ja",
+				"Set Syntax: Java"
+			]
+		],
+		"width": 588.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/jake/Desktop/test.js",
+		"/Users/jake/dev/investigator-project/investigator/shared/bootstrap.js",
+		"/Users/jake/dev/investigator-project/investigator/client/templates/static_pages/about.html",
+		"/Users/jake/dev/investigator-project/investigator/client/templates/static_pages/contact.html",
+		"/Users/jake/dev/investigator-project/investigator/client/templates/static_pages/mission.html",
+		"/Users/jake/dev/investigator-project/investigator/client/app.less",
+		"/Users/jake/dev/investigator-project/investigator/smart.json",
+		"/Users/jake/dev/investigator-project/investigator/smart.lock",
+		"/Users/jake/dev/investigator-project/investigator/investigator.js",
+		"/Users/jake/dev/investigator-project/investigator/investigator.html",
+		"/Users/jake/dev/pipl/main.py",
+		"/Users/jake/dev/tldr-nltk/main.py",
+		"/Users/jake/dev/spotify-web-python-client/sample.py",
+		"/Users/jake/dev/flasher/notecard/templates/notecard/list_cards_in_deck.html",
+		"/Users/jake/dev/flasher/flasher/urls.py",
+		"/Users/jake/dev/flasher/notecard/templates/registration/login.html",
+		"/Users/jake/dev/flasher/README.md",
+		"/Users/jake/dev/flasher/notecard/templates/registration/logged_out.html",
+		"/Users/jake/dev/flasher/notecard/templates/notecard/login.html",
+		"/Users/jake/dev/flasher/flasher/settings/base.py",
+		"/Users/jake/dev/flasher/manage.py",
+		"/Users/jake/dev/flasher/notecard/models.py",
+		"/Users/jake/dev/flasher/notecard/admin.py",
+		"/Users/jake/dev/flasher/apps/notecard/templates/index.html",
+		"/Users/jake/dev/flasher/notecard/views.py",
+		"/Users/jake/dev/flasher/templates/base.html",
+		"/Users/jake/dev/flasher/apps/notecard/views.py",
+		"/Users/jake/dev/flasher/settings/base.py",
+		"/Users/jake/dev/flasher/flasher/settings/__init__.py",
+		"/Users/jake/dev/flasher/settings/__init__.py",
+		"/Users/jake/dev/flasher/settings/local.py",
+		"/Users/jake/dev/flasher/flasher/wsgi.py",
+		"/Users/jake/dev/fuckmatt/iwin/views.py",
+		"/Users/jake/Desktop/views.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/616C314B-A470-439F-AB3E-4D145E8BBED7/views.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/B80762F6-CF9E-4EE0-9B62-E755B3425BCD/urls.py",
+		"/Users/jake/Desktop/urls.py",
+		"/Users/jake/dev/tldr/app.css",
+		"/Users/jake/dev/tldr/client/app.html",
+		"/Users/jake/dev/tldr/shared/bootstrap.js",
+		"/Users/jake/dev/tldr/server/bootstrap.js",
+		"/Users/jake/dev/tldr/client/app.js",
+		"/Users/jake/Desktop/matt.html",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/JSLint/JSLint.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/JSLint/JSLint.sublime-build",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/User/JSLint.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/Theme - Pseudo OSX/Pseudo OSX Light.sublime-theme",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 2/Packages/Theme - Soda/package-metadata.json",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/088397A3-68C0-4A77-B783-861C4B60384A/index2.html",
+		"/Users/jake/dev/tldr/shared/tldrapiclient.js",
+		"/Users/jake/dev/tldr/readme.md",
+		"/Users/jake/dev/tldr/lib/tldrapi/tldrclient.js",
+		"/Users/jake/dev/node/api-js-client/jsClient.js",
+		"/Users/jake/dev/tldr/lib/helpers/handlebars.helpers.js",
+		"/Users/jake/dev/node/api-js-client/README.md",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/NodejsNoShell.sublime-build",
+		"/Users/jake/dev/tldr/shared/dataloader.js",
+		"/Users/jake/dev/tldr/tldr.js",
+		"/Users/jake/dev/tldr/lib/tldrapi/README.md",
+		"/Users/jake/dev/tldr/test/test.test",
+		"/Users/jake/dev/node/api-js-client/.gitignore",
+		"/Users/jake/Desktop/IDL_rewrite/css/override.css",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/Nodejs/Nodejs.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/Nodejs/Nodejs.sublime-build",
+		"/Users/jake/Desktop/test.html",
+		"/Users/jake/dev/node/test.js",
+		"/Users/jake/dev/private_let.py",
+		"/Users/jake/dev/adventure-cueup/level2.py",
+		"/Users/jake/dev/adventure-cueup/level3.md",
+		"/Users/jake/dev/adventure-cueup/readme.md",
+		"/Users/jake/dev/adventure-cueup/level1_vax.py",
+		"/Users/jake/dev/node/api-js-client/test.js",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/Nodejs.sublime-build",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/Nodejs.sublime-settings",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/c_build.sublime-build",
+		"/Users/jake/dev/Fixit/manage.py",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/User/Node.sublime-build",
+		"/Users/jake/Desktop/public_html/css/override.css",
+		"/Users/jake/Desktop/public_html/tmp.html",
+		"/Users/jake/Desktop/public_html/css/awesome.css",
+		"/Users/jake/Desktop/public_html/css/bootstrap.css",
+		"/Users/jake/Desktop/public_html/index2.html",
+		"/Users/jake/Desktop/public_html/index.php",
+		"/Users/jake/dev/pacpac/pacpac/level1.txt",
+		"/Users/jake/dev/meteor/agri/shared/app.js",
+		"/Users/jake/dev/meteor/agri/client/app.js",
+		"/Users/jake/dev/meteor/agri/server/bootstrap.js",
+		"/Users/jake/dev/meteor/agri/app.js",
+		"/Users/jake/dev/meteor/agri/fixit_dbimport.js",
+		"/Users/jake/dev/meteor/agri/templates/templates.html",
+		"/Users/jake/dev/meteor/agri/agri.html",
+		"/Users/jake/dev/meteor/agri/dataloader.js",
+		"/Users/jake/dev/Fixit/jobs/models.py",
+		"/Users/jake/dev/deployd/hello-world/resources/jobs/put.js",
+		"/Users/jake/dev/deployd/hello-world/resources/jobs/post.js",
+		"/Users/jake/dev/deployd/hello-world/app.dpd",
+		"/Users/jake/Downloads/bachotex2005-david-carlisle-pearl1 (1).tex",
+		"/Users/jake/Downloads/bachotex2005-david-carlisle-pearl1.tex",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/8E436467-4306-4498-AC58-5EC9542FDED5/views.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/95D2ADEB-4393-46D2-90BD-0ECB7768AF58/views.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/C580B5B8-CA5A-424D-9094-7D9A7F744058/side_analyze.html",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/88ECD07E-C961-4F1D-B116-A05AA749F8C7/analyze_search_gram.html",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/74BE0719-8BE4-4F7A-A583-63E6206C5249/side_analyze.html",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/FBA53BCA-3570-42D8-8416-D88E7436F462/view_search_data.html",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/B3F794AB-8D46-43E0-826C-0755FEBD1A06/views.py",
+		"/Users/jake/dev/whozen/whozen/friendfinder/admin.p",
+		"/Users/jake/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/whozenAPI-Location.md",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/Home.md",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/whozenAPI-User.md",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/whozenAPI-Friend.md",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/whozenAPI-Circle.md",
+		"/Users/jake/dev/whozen_wiki/whozen.wiki/whozenAPI-Relationship.md",
+		"/Users/jake/Downloads/times.py",
+		"/Users/jake/Downloads/fizzbuzz.py",
+		"/Users/jake/Downloads/tut1.py",
+		"/Users/jake/dev/Fixit/fixit/urls.py",
+		"/Users/jake/dev/Fixit/jobs/urls.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/71F8705B-AAD3-4026-8829-75E9197FA577/remote.py",
+		"/Users/jake/Library/Caches/Cleanup At Startup/Transmit/4EFA47A8-C54D-468E-8735-259E506FFB79/remote.py",
+		"/Users/jake/dev/monopolyJS/css/styles.css",
+		"/Users/jake/dev/monopolyJS/monopoly_stable_rectBoard.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"value",
+			"\"\n",
+			"var",
+			"client.key = this.prop;",
+			"this.",
+			"var ",
+			"code",
+			"restful",
+			"profile",
+			"UltimaSDK",
+			"genericApiAdapter",
+			"UltimaSDK.genericApiAdapter",
+			"fields",
+			"facebook",
+			"UltimaClient",
+			"API",
+			"UltimaSDK",
+			"extend",
+			"myspace",
+			"_myspace",
+			"_\\w*",
+			"var",
+			"\\w*SDK",
+			"SDK",
+			"new_search_form",
+			"save_new_search_form",
+			"new_search_form",
+			"newSearchFormTrigger",
+			"new_search_form",
+			"          ",
+			"         ",
+			"        ",
+			"       ",
+			"      ",
+			"            ",
+			"           ",
+			"          ",
+			"         ",
+			"        ",
+			"       ",
+			"      ",
+			"button",
+			"Email",
+			"inputEmail",
+			"inputLastName",
+			"name",
+			"newSearchFormTrigger",
+			"header",
+			"changes",
+			"new_search_form",
+			"myModal",
+			"danger",
+			"Cancel",
+			"Tldrs",
+			"display_name",
+			"link",
+			"=",
+			"static_layout",
+			"dashboard_layout",
+			"dashboard",
+			"home",
+			"About",
+			"display_name",
+			"about",
+			"About",
+			"Mission",
+			"About",
+			"about",
+			"About",
+			"contact",
+			"about",
+			"contact",
+			"about",
+			"investigator",
+			"message",
+			"Subname",
+			"data",
+			"api_key",
+			"twitter",
+			"your_key",
+			"back",
+			"front",
+			"create_card",
+			"notecard_details",
+			"name",
+			"\\t",
+			"login",
+			"active",
+			"\">",
+			"my_view",
+			"]\n",
+			"second_half",
+			"len(aStr) / 2",
+			"-len(aStr) / 2",
+			"a",
+			"a1",
+			"/",
+			"replacementObject",
+			"object",
+			"ana",
+			"term",
+			"active",
+			"html",
+			"\">",
+			"\"",
+			"./",
+			"HTML",
+			"L",
+			"jsli",
+			"AppKit",
+			"Light",
+			"AppKit",
+			"Tldrs",
+			"tldrs",
+			"Filtersets",
+			"Filterset",
+			"\"",
+			"filtersets",
+			"tldrs",
+			"Tldrs",
+			"unstyled",
+			"tldrs_list",
+			"$and",
+			"user_remove_filterset",
+			"target",
+			"filters",
+			"Name",
+			"button"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"    ",
+			"",
+			"\"",
+			"",
+			"[0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1,0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1]",
+			"[1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1,1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1]",
+			"h5",
+			"h4",
+			"] (fire OR grass OR water OR rain OR cold OR hot)",
+			"from utils.mashape."
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "ultima.js",
+					"settings":
+					{
+						"buffer_size": 5683,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4829,
+								4829
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2308.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 322.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"smart",
+				"investigator/smart.lock"
+			],
+			[
+				"server/",
+				"investigator/server/bootstrap.js"
+			],
+			[
+				"read",
+				"tldr/readme.md"
+			],
+			[
+				"readm",
+				"node/api-js-client/README.md"
+			],
+			[
+				"level1",
+				"adventure-cueup/level1_vax.py"
+			],
+			[
+				"",
+				"adventure-cueup/level2.py"
+			],
+			[
+				"adven",
+				"adventure-cueup/level1_vax.py"
+			],
+			[
+				"tweeter",
+				"static/jquery_plugin/js/jquery.ui.tweeter.js"
+			],
+			[
+				"study",
+				"study/models.py"
+			],
+			[
+				"data.",
+				"data.json"
+			],
+			[
+				"test.ht",
+				"datapoint/templates/test.html"
+			],
+			[
+				"adm",
+				"study/admin.py"
+			],
+			[
+				"url",
+				"django-blogger/blogger/urls.py"
+			],
+			[
+				"rela",
+				"Python/settings.py - relative_project_path.sublime-snippet"
+			],
+			[
+				"model",
+				"blogger/models.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/Users/jake/dev/smtas3/smtas3.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 192.0,
+	"status_bar_visible": true
+}
