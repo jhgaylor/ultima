@@ -50,10 +50,6 @@ var UltimaSDK = (function () {
     var _twitter;
     var _youtube;
     var _instagram;
-    var _google;
-    var _linkedin;
-    var _disqus;
-    var _myspace;
 
     UltimaSDK.genericApiAdapter = function () {
         //I don't like my errors solution at all.  look around

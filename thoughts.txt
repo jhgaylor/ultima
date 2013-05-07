@@ -1,0 +1,23 @@
+starClient = Ultima({
+    'facebook': {
+        'baseUrl': "",
+        'headers': {},
+        'auth': {
+            'secret': "",
+            'key': ""
+        },
+    }
+})
+
+
+starClient.setMethod('feed', {
+    'facebook': {
+        'url': "",
+        'method': "",
+        'headers': {},
+        'nextKey': "",
+        'prevKey': ""
+    }
+})
+
+
