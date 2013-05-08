@@ -12,9 +12,7 @@ class Ultima(object):
     def __init__(self, options):
         options = self._cleanOptions(options)
         for network, network_options in options.iteritems():
-            # TODO: is there a difference?
             setattr(self, network, Network(network_options))
-            # self.__dict__[network] = Network(network_options)
 
     def __iter__(self):
         """
@@ -26,9 +24,7 @@ class Ultima(object):
     def setEndpoint(self, options):
         for method, networks in options.iteritems():
             for network, network_options in networks.iteritems():
-                # TODO: is there a difference?
                 getattr(self, network).setEndpoint(method, network_options)
-                # self.__dict__[network].setEndpoint(method, network_options)
 
     def _cleanOptions(self, options):
         #TODO: remove all keys that are python reserved words
@@ -66,7 +62,6 @@ class Network(object):
     def setEndpoint(self, method, endpoint_options):
         """ Assign a callable to the endpoint name """
         setattr(self, method, Endpoint(self._client, endpoint_options))
-        # self.__dict__[method] = Endpoint(self.client, endpoint_options)
 
     def _cleanOptions(self, options):
         """ Prepare options for use by removing invalid keys. """
