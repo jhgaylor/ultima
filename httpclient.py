@@ -6,16 +6,11 @@ class HttpClient(object):
     """
     An interface over the requests library.
     """
-    #this object is an interface over the requests library.
-    #self.delegate is an object that adheres the requests api
-    #the object should be an rauth instance if the server expects
-    #an oauth token
+    # self.session is an object that adheres the requests api
+    # the object should be an rauth instance if the server expects
+    # an oauth token
 
-    #TODO: what stage should the rauth object be at? should it be
-    #an active session? should it be the options necessary to
-    #create the instance?
-
-    #TODO: how do i deal with variables embedded in the url?
+    # TODO: how do i deal with variables embedded in the url?
     def __init__(self, baseUrl, headers, auth):
         """
         configures client library
@@ -24,11 +19,17 @@ class HttpClient(object):
         self.headers = headers
         self.auth = None
 
-        if auth['type'] == "oauth":
-            self.request = auth['oauth']
+        # if necessary inflate auth from a dictionary to a session
+        if auth['type'] == "oauth1":
+            session = rauth.OAuth1Service(**auth['session'])
+            self.session = session
+        elif auth['type'] == "oauth2":
+            session = rauth.OAuth2Service(**auth['session'])
+            self.session = session
         else:
-            self.request = requests
+            self.session = requests
 
+        # if the auth mechanism is headers or api key
         if auth['type'] == "headers":
             self.headers.update(auth['headers'])
 
@@ -47,14 +48,14 @@ class HttpClient(object):
         response = None
 
         if method == "get":
-            response = self.request.get(url,
+            response = self.session.get(url,
                                         params=data,
                                         headers=self.headers.update(headers),
                                         auth=self.auth
                                         )
 
         elif method == "post":
-            response = self.request.post(url,
+            response = self.session.post(url,
                                          data=data,
                                          headers=self.headers.update(headers),
                                          auth=self.auth
@@ -64,7 +65,6 @@ class HttpClient(object):
             # error representing failure to determine http method
             return False
 
-        #process the response
         processed_response = self._processResponse(response)
         print processed_response
 
@@ -74,6 +74,7 @@ class HttpClient(object):
         Error: {'error': type(str), 'code': type(int)}
         Success: response.json()
         """
+        # TODO: figure out errors or exceptions
         # should the error be an exception object?
         if response.status_code >= 200:
             # success codes should be handled here
@@ -90,8 +91,8 @@ class HttpClient(object):
             return error
 
     def _composeURL(self, url, data):
-        #TODO: pick replacement pattern and whether
-        #to do named or ordered injection
+        # TODO: pick replacement pattern and whether
+        # to do named or ordered injection
         return url
 
     def _joinURL(self, a, b):

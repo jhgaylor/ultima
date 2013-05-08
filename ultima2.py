@@ -7,10 +7,20 @@ def _(s):
 
 
 class Ultima(object):
-    # A Common interface for creating network and endpoints.
-    # Public API is only the available networks
+    """
+    A Common interface for creating networks and endpoints.
+    Public API is only the available networks
+
+    Iteration returns networks
+    """
     def __init__(self, options):
-        options = self._cleanOptions(options)
+        """
+        Create a network w/ options for each key, value
+        pair in options.
+        """
+        if not self._verifyOptions(options):
+            raise Exception
+
         for network, network_options in options.iteritems():
             setattr(self, network, Network(network_options))
 
@@ -22,34 +32,43 @@ class Ultima(object):
             yield value
 
     def setEndpoint(self, options):
+        """
+        Create an endpoint on each network w/ options for each key.
+        { method: { network1: {options}, network2: {options} }
+        """
         for method, networks in options.iteritems():
             for network, network_options in networks.iteritems():
                 getattr(self, network).setEndpoint(method, network_options)
 
-    def _cleanOptions(self, options):
-        #TODO: remove all keys that are python reserved words
-        return options
+    def _verifyOptions(self, options):
+        """
+        Raise exeption if options contains an invalid key.
+        """
+        reserved_words = ["and", "del", "for", "is", "raise", "assert",
+                          "elif", "from", "lambda", "return", "break",
+                          "else", "global", "not", "try", "class", "except",
+                          "if", "or", "while", "continue", "exec", "import",
+                          "pass", "yield", "def", "finally", "in", "print"
+                          ]
+        for key in options:
+            if key in reserved_words:
+                return False
+        return True
 
 
 class Network(object):
     """
     An object containing a custom http client and callables
     representing the endpoints for the network.
+    Public API is all available endpoints and a psuedo private
+    custom HttpClient.
     """
-    # Public API is all available endpoints and a psuedo private
-    # custom HttpClient.
 
-    # using options not **kwargs so we can use a json object.
     def __init__(self, options):
-        # some work may need to be done here on options['auth'] because of
-        # a todo from the HttpClient class. this is the earliest we can
-        # inflate the rauth object
-
         self._client = HttpClient(baseUrl=options['baseUrl'],
                                   headers=options['headers'],
                                   auth=options['auth']
                                   )
-        # self.client = self._buildClient()
 
     def __iter__(self):
         """
@@ -63,8 +82,10 @@ class Network(object):
         """ Assign a callable to the endpoint name """
         setattr(self, method, Endpoint(self._client, endpoint_options))
 
-    def _cleanOptions(self, options):
-        """ Prepare options for use by removing invalid keys. """
+    def _verifyOptions(self, options):
+        """
+        Raise exeption if options contains an invalid key.
+        """
         return options
 
 
@@ -75,9 +96,8 @@ class Endpoint(object):
 
         for key, value in options.iteritems():
             setattr(self, key, value)
-            # print key, value
 
-    # this makes the instance of the class callable
+    # this is the entry point for url and data params
     def __call__(self, *args, **kwargs):
         params = self._translate(kwargs)
         self._last_args = [self.url, self.method, self.headers, params]
@@ -116,6 +136,8 @@ class Endpoint(object):
         return options
 
 
+# TODO: find a place for translation dictionaries.
+# should this be per network or per endpoint
 ultima_options = {
     'tldr': {
         'baseUrl': "https://api.tldr.io",
@@ -140,6 +162,7 @@ ultima_options = {
         }
     }
 }
+
 
 endpoint_options = {
     'latest': {
@@ -175,11 +198,13 @@ endpoint_options = {
         }
     }
 }
+
+
 ultima = Ultima(ultima_options)
 ultima.setEndpoint(endpoint_options)
 
 # print [key for key in ultima.tldr.__dict__]
-# print ultima.tldr.__dict__
+print ultima.tldr.__dict__
 print [i for i in ultima.tldr]
 # print ultima.tldr.posts()
 # print ultima.tldr.latest()
@@ -192,14 +217,3 @@ print [i for i in ultima.tldr]
 # ultima.network.endpoint.next()
 # if the prev key was available, goes to the prev page
 # ultima.network.endpoint.prev()
-
-
-# print ultima.tldr.__dict__  # latest(1, 2, name="jake")
-# print ultima.codegurus.posts(1, 2, 3)  # .latest(1, 2, name="jake")
-# for k, v in ultima.__dict__.iteritems():
-#    print v.__dict__
-
-# for k, v in ultima_options.iteritems():
-#     print k, v
-
-# starClient = Ultima(ultima_options)
