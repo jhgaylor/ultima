@@ -1,4 +1,5 @@
-#import rauth
+import rauth
+from httpclient import HttpClient
 
 
 def _(s):
@@ -6,68 +7,118 @@ def _(s):
 
 
 class Ultima(object):
-
+    # A Common interface for creating network and endpoints.
+    # Public API is only the available networks
     def __init__(self, options):
+        options = self._cleanOptions(options)
         for network, network_options in options.iteritems():
-            self.__dict__[network] = Network(network_options)
+            # TODO: is there a difference?
+            setattr(self, network, Network(network_options))
+            # self.__dict__[network] = Network(network_options)
 
-    def setEndpoint(self, method, options):
-        for network, network_options in options.iteritems():
-            self.__dict__[network].setEndpoint(method, network_options)
+    def __iter__(self):
+        """
+        Iterable to make it easy to call .endpoint of every network
+        """
+        for key, value in self.__dict__.iteritems():
+            yield value
+
+    def setEndpoint(self, options):
+        for method, networks in options.iteritems():
+            for network, network_options in networks.iteritems():
+                # TODO: is there a difference?
+                getattr(self, network).setEndpoint(method, network_options)
+                # self.__dict__[network].setEndpoint(method, network_options)
 
     def _cleanOptions(self, options):
-        # remove keys we aren't prepared to deal with
+        #TODO: remove all keys that are python reserved words
         return options
 
 
 class Network(object):
+    """
+    An object containing a custom http client and callables
+    representing the endpoints for the network.
+    """
+    # Public API is all available endpoints and a psuedo private
+    # custom HttpClient.
 
+    # using options not **kwargs so we can use a json object.
     def __init__(self, options):
-        for key, value in options.iteritems():
-            self.__dict__[_(key)] = value
+        # some work may need to be done here on options['auth'] because of
+        # a todo from the HttpClient class. this is the earliest we can
+        # inflate the rauth object
 
-    def setEndpoint(self, method, options):
-        pass
+        self._client = HttpClient(baseUrl=options['baseUrl'],
+                                  headers=options['headers'],
+                                  auth=options['auth']
+                                  )
+        # self.client = self._buildClient()
+
+    def __iter__(self):
+        """
+        Iterable to be consistant with Ultima
+        """
+        for key, value in self.__dict__.iteritems():
+            if key[0] != "_":
+                yield value
+
+    def setEndpoint(self, method, endpoint_options):
+        """ Assign a callable to the endpoint name """
+        setattr(self, method, Endpoint(self._client, endpoint_options))
+        # self.__dict__[method] = Endpoint(self.client, endpoint_options)
 
     def _cleanOptions(self, options):
-        # remove keys we aren't prepared to deal with
+        """ Prepare options for use by removing invalid keys. """
         return options
 
 
 class Endpoint(object):
 
-    def __init__(self, options):
-        for key, value in options.iteritems():
-            if key == "headers":
-                self.__dict__[_(key)].update(value)
-            print key, value
+    def __init__(self, client, options):
+        self.client = client
 
-    def _buildUrl(self):
-        # how am I supposed to get to the network from here?
-        # i need the base_url.  if i have to use python dunder
-        # magic, then maybe i need to rethink my structure here.
+        for key, value in options.iteritems():
+            setattr(self, key, value)
+            # print key, value
+
+    # this makes the instance of the class callable
+    def __call__(self, *args, **kwargs):
+        params = self._translate(kwargs)
+        self._last_args = [self.url, self.method, self.headers, params]
+        return self.refresh()
+
+    def next(self):
+        self._last_args = [self._next_url, self.method, self.headers, {}]
+        return self.refresh()
+
+    def prev(self):
+        self._last_args = [self._prev_url, self.method, self.headers, {}]
+        return self.refresh()
+
+    def refresh(self):
+        """
+        Sends the last request again.
+        """
+        response = self.client.call(*self._last_args)
+        processed_response = self._processResponse(response)
+        return processed_response
+
+    def _processResponse(self, response):
+        # this is where an error from HttpClient would propogate
+        # unless we use exceptions, then it's already dealt with
+        # check for next key
+        # if response[self.next_key]:
+        #    self._next_url = response[self.next_key]
+        # check for prev key
+        # if response[self.prev_key]:
+        #    self._prev_url = response[self.prev_key]
         pass
 
-    def _cleanResponse(self, response):
-        """
-        Returns a dictionary representation of the response.
-        Error: {'error': type(str), 'code': type(int)}
-        Success: response.json()
-        """
-        if response.status_code >= 200:
-            #success codes should be handled here
-            if response.status_code == 200:
-                return response.json()
-        if response.status_code >= 400:
-            #default error. assumes the api returns error text as the body
-            error = {
-                'code': response.status_code,
-                'error': response.text
-            }
-            if response.status_code == 404:
-                error['error'] = "URL not found."
-            return error
-
+    def _translate(self, options):
+        # used to change the common names for arguments to endPoint()
+        # into the names specific to this network
+        return options
 
 
 ultima_options = {
@@ -76,33 +127,84 @@ ultima_options = {
         'headers': {},
         'auth': {
             'type': 'headers',
-            'header': {
+            'headers': {
                 'name': 'jakegaylor',
+                'key': "09fd8c39ae32ccf8e6ac8"
+            }
+        }
+    },
+    'codegurus': {
+        'baseUrl': "https://api.codegurus.io",
+        'headers': {},
+        'auth': {
+            'type': 'headers',
+            'headers': {
+                'name': 'tester',
                 'key': "09fd8c39ae32ccf8e6ac8"
             }
         }
     }
 }
 
-latest_endpoint = {
-    'tldr': {
-        'url': "/tldrs/latest/",
-        'method': "get",
-        'headers': {},
-        'nextKey': None,
-        'prevKey': None
+endpoint_options = {
+    'latest': {
+        'tldr': {
+            'url': "/tldrs/latest/",
+            'method': "get",
+            'headers': {},
+            'nextKey': None,
+            'prevKey': None
+        },
+        'codegurus': {
+            'url': "/latest/",
+            'method': "get",
+            'headers': {},
+            'nextKey': None,
+            'prevKey': None
+        }
+    },
+    'posts': {
+        'tldr': {
+            'url': "/tldrs/posts/",
+            'method': "get",
+            'headers': {},
+            'nextKey': None,
+            'prevKey': None
+        },
+        'codegurus': {
+            'url': "/posts/",
+            'method': "get",
+            'headers': {},
+            'nextKey': None,
+            'prevKey': None
+        }
     }
 }
-
 ultima = Ultima(ultima_options)
+ultima.setEndpoint(endpoint_options)
 
-ultima.setEndpoint('latest', latest_endpoint)
-print ultima.__dict__
-for k, v in ultima.__dict__.iteritems():
-    print v.__dict__
+# print [key for key in ultima.tldr.__dict__]
+# print ultima.tldr.__dict__
+print [i for i in ultima.tldr]
+# print ultima.tldr.posts()
+# print ultima.tldr.latest()
+
+## Example
+# ultima.network.endpoint()
+# sends the preview request again
+# ultima.network.endpoint.refresh()
+# if the next key was available, goes to the next page
+# ultima.network.endpoint.next()
+# if the prev key was available, goes to the prev page
+# ultima.network.endpoint.prev()
+
+
+# print ultima.tldr.__dict__  # latest(1, 2, name="jake")
+# print ultima.codegurus.posts(1, 2, 3)  # .latest(1, 2, name="jake")
+# for k, v in ultima.__dict__.iteritems():
+#    print v.__dict__
 
 # for k, v in ultima_options.iteritems():
 #     print k, v
-
 
 # starClient = Ultima(ultima_options)
