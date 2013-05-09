@@ -67,6 +67,7 @@ class HttpClient(object):
 
         processed_response = self._processResponse(response)
         print processed_response
+        return processed_response
 
     def _processResponse(self, response):
         """
@@ -75,7 +76,7 @@ class HttpClient(object):
         Success: response.json()
         """
         # TODO: figure out errors or exceptions
-        # should the error be an exception object?
+        # return data or error dictionary
         if response.status_code >= 200:
             # success codes should be handled here
             if response.status_code == 200:
@@ -91,8 +92,8 @@ class HttpClient(object):
             return error
 
     def _composeURL(self, url, data):
-        # TODO: pick replacement pattern and whether
-        # to do named or ordered injection
+        # TODO: use python named string replacement
+        # "/%(userID)s/statuses/"
         return url
 
     def _joinURL(self, a, b):

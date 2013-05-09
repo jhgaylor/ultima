@@ -98,6 +98,7 @@ class Endpoint(object):
             setattr(self, key, value)
 
     # this is the entry point for url and data params
+    # do call as star.network.endpoint(url_params={}, **kwargs)
     def __call__(self, *args, **kwargs):
         params = self._translate(kwargs)
         self._last_args = [self.url, self.method, self.headers, params]
@@ -137,7 +138,7 @@ class Endpoint(object):
 
 
 # TODO: find a place for translation dictionaries.
-# should this be per network or per endpoint
+# this should be network wide
 ultima_options = {
     'tldr': {
         'baseUrl': "https://api.tldr.io",
