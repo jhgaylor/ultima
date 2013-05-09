@@ -98,18 +98,26 @@ class Endpoint(object):
             setattr(self, key, value)
 
     # this is the entry point for url and data params
-    # do call as star.network.endpoint(url_params={}, **kwargs)
+    # do call as star.network.endpoint({'url_param1':"value"}, **kwargs)
     def __call__(self, *args, **kwargs):
         params = self._translate(kwargs)
-        self._last_args = [self.url, self.method, self.headers, params]
+
+        #optional unnamed parameter for url composition
+        if len(args) > 0:
+            url_params = self._translate(args[0])
+        else:
+            url_params = self.url_defaults
+
+        print params
+        self._last_args = [self.url, self.method, self.headers, params, url_params]
         return self.refresh()
 
     def next(self):
-        self._last_args = [self._next_url, self.method, self.headers, {}]
+        self._last_args = [self._next_url, self.method, self.headers, {}, url_params]
         return self.refresh()
 
     def prev(self):
-        self._last_args = [self._prev_url, self.method, self.headers, {}]
+        self._last_args = [self._prev_url, self.method, self.headers, {}, url_params]
         return self.refresh()
 
     def refresh(self):
@@ -129,7 +137,7 @@ class Endpoint(object):
         # check for prev key
         # if response[self.prev_key]:
         #    self._prev_url = response[self.prev_key]
-        pass
+        return response
 
     def _translate(self, options):
         # used to change the common names for arguments to endPoint()
@@ -168,7 +176,10 @@ ultima_options = {
 endpoint_options = {
     'latest': {
         'tldr': {
-            'url': "/tldrs/latest/",
+            'url': "/tldrs/latest/%(number)s",
+            'url_defaults': {
+                'number': 1
+            },
             'method': "get",
             'headers': {},
             'nextKey': None,
@@ -205,10 +216,14 @@ ultima = Ultima(ultima_options)
 ultima.setEndpoint(endpoint_options)
 
 # print [key for key in ultima.tldr.__dict__]
-print ultima.tldr.__dict__
-print [i for i in ultima.tldr]
+# print ultima.tldr.__dict__
+# print [i for i in ultima.tldr]
 # print ultima.tldr.posts()
 # print ultima.tldr.latest()
+import json
+#Example with url paramters
+#print json.dumps(ultima.tldr.latest({'number':1}))
+print json.dumps(ultima.tldr.latest())
 
 ## Example
 # ultima.network.endpoint()

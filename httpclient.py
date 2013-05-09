@@ -10,7 +10,6 @@ class HttpClient(object):
     # the object should be an rauth instance if the server expects
     # an oauth token
 
-    # TODO: how do i deal with variables embedded in the url?
     def __init__(self, baseUrl, headers, auth):
         """
         configures client library
@@ -41,7 +40,7 @@ class HttpClient(object):
         Sends an authenticated request via the requests module.
         Returns a response or error object
         """
-        url = self._composeUrl(self._joinURL(self.baseUrl, partial_url),
+        url = self._composeURL(self._joinURL(self.baseUrl, partial_url),
                                url_vars
                                )
 
@@ -92,9 +91,10 @@ class HttpClient(object):
             return error
 
     def _composeURL(self, url, data):
-        # TODO: use python named string replacement
-        # "/%(userID)s/statuses/"
-        return url
+        """
+        Uses python named string composition from dictionary
+        """
+        return (url % data)
 
     def _joinURL(self, a, b):
         """
