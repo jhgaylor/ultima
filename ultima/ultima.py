@@ -107,7 +107,7 @@ class Network(object):
             if field not in options:
                 options[field] = value
 
-        for field, value in self.required_fields.iteritems():
+        for field in self.required_fields:
             if field not in options:
                 raise RequiredField
 
@@ -131,7 +131,9 @@ class Endpoint(object):
         self.client = client
 
         self.optional_fields = {
+            'url_defaults': {},
             'headers': {},
+            'form_encoding': True,
             'nextKey': None,
             'prevKey': None
         }
@@ -154,12 +156,12 @@ class Endpoint(object):
         else:
             url_params = self.url_defaults
 
-        print params
         self._last_args = [self.url,
                            self.method,
                            self.headers,
                            params,
-                           url_params
+                           url_params,
+                           self.form_encoding
                            ]
         return self.refresh()
 
@@ -188,7 +190,7 @@ class Endpoint(object):
             if field not in options:
                 options[field] = value
 
-        for field, value in self.required_fields.iteritems():
+        for field in self.required_fields:
             if field not in options:
                 raise RequiredField
 

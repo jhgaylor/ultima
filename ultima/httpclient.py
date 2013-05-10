@@ -1,5 +1,6 @@
-import rauth
+import json
 import requests
+import rauth
 
 
 class MissingHttpMethod(RuntimeError):
@@ -43,7 +44,7 @@ class HttpClient(object):
         if auth['type'] == "basic":
             self.auth = tuple(auth['headers'])
 
-    def call(self, partial_url, method, headers, data, url_vars):
+    def call(self, partial_url, method, headers, data, url_vars, form_encoding):
         """
         Sends an authenticated request via the requests module.
         Returns a response or error object
@@ -51,7 +52,6 @@ class HttpClient(object):
         valid_methods = ["get", "post"]
         if method not in valid_methods:
             raise MissingHttpMethod
-
         url = self._composeURL(self._joinURL(self.baseUrl, partial_url),
                                url_vars
                                )
@@ -62,10 +62,12 @@ class HttpClient(object):
         auth = self.auth
 
         #this is a call to a method of self. looks kinda wonky doesn't it?
+        if form_encoding:
+            data = json.dumps(data)
         response = getattr(self, method)(url, data, built_headers, auth)
 
         processed_response = self._processResponse(response)
-        print processed_response
+
         return processed_response
 
     def get(self, url, data, headers, auth):

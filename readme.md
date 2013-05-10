@@ -28,6 +28,8 @@ can contain variables
 
 Hash of success and failure codes
 
+Success codes will return the object from the json of the response body.
+
     {
         'success': [200,202],
         'failure': {
@@ -61,6 +63,12 @@ HTTP method for request
 
 ### headers
 Dictionary of http headers to be added to network.headers
+
+### url_defaults
+Dictionary of default url parameter values
+
+### form_encoding
+Defaults to true.  set false to send json string instead
 
 ### nextKey
 A key to find in the json data to the next page of results
