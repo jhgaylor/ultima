@@ -127,6 +127,9 @@ class Network(object):
 
 
 class Endpoint(object):
+    """
+    Callable
+    """
 
     def __init__(self, client, options):
         #TODO: remove unwanted keys from options?
