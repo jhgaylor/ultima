@@ -53,27 +53,18 @@ Example
 
 #### Required:
 --------------
-##### baseUrl
-The static portion of the network's api url.
-can contain variables
+**baseUrl** -- *The static portion of the network's api url and can contain variables*
 
-##### status_codes
-
-Hash of success and failure codes
-
-Success codes will return the object from the json of the response body.
+**status_codes** -- *Hash of success and failure codes.  Success codes will return the object from the json of the response body.*
 
 
 #### Optional:
 --------------
-##### headers
-Dictionary of http headers
+**headers** -- *Dictionary of http headers*
 
-##### auth
-Auth settings.
+**auth** -- *Auth settings.*
 
-##### translations
-Dictionary mapping Ultima terms to Network terms
+**translations** -- *Dictionary mapping Ultima terms to Network terms*
 
 ##Endpoint options
 
@@ -104,25 +95,18 @@ Dictionary mapping Ultima terms to Network terms
 
 ####Required:
 -------------
-##### url
-url stub w/ variables using python named string replacement
+**url** -- *url stub w/ variables using python named string replacement*
 
-##### method
-HTTP method for request
+**method** -- *HTTP method for request*
 
 #### Optional:
 --------------
-##### headers
-Dictionary of http headers to be added to network.headers
+**headers** -- *Dictionary of http headers to be added to network.headers*
 
-##### url_defaults
-Dictionary of default url parameter values
+**url_defaults** -- *Dictionary of default url parameter values*
 
-##### form_encoding
-Defaults to true.  set false to send json string instead
+**form_encoding** -- *Defaults to true.  set false to send json string instead*
 
-##### nextKey
-A key to find in the json data to the next page of results
+**nextKey** -- *A key to find in the json data to the next page of results*
 
-##### prevKey
-A key to find in the json data to the prev page of results
+**prevKey** -- *A key to find in the json data to the prev page of results*
