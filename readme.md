@@ -67,7 +67,7 @@ Example
 
 **translations** -- *Dictionary mapping Ultima terms to Network terms*
 
-##Endpoint options
+### Endpoint options
 
     endpoint_options = {
         'getLatestTldrs': {
