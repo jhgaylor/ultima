@@ -22,6 +22,34 @@ Talk about how cool it will be to have providers describing their network and be
     ultima.network.endpoint.prev()
 
 ### Network options
+Example
+
+    network_options = {
+        'tldr': {
+            'baseUrl': "https://api.tldr.io",
+            'headers': {},
+            'auth': {
+                'type': 'headers',
+                'headers': {
+                    'name': 'username',
+                    'key': "key"
+                }
+            },
+            'status_codes': {
+                'success': [200],
+                'failure': {
+                    404: "URL not found"
+                }
+            },
+            'translations': {
+                #key, value = Ultima term, Network specific term
+                'rpp': "number",
+                'user': "username"
+            }
+        }
+    }
+
+
 
 #### Required:
 --------------
@@ -35,13 +63,6 @@ Hash of success and failure codes
 
 Success codes will return the object from the json of the response body.
 
-    {
-        'success': [200,202],
-        'failure': {
-                    404: "URL not found.",
-                    403: "Forbidden"
-        }
-    }
 
 #### Optional:
 --------------
