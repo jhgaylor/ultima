@@ -1,9 +1,14 @@
-import rauth
 from httpclient import HttpClient
 
 
 def _(s):
     return "_" + s
+
+
+class RequiredField(Exception):
+    """
+    This field is required for instantiation
+    """
 
 
 class Ultima(object):
@@ -60,15 +65,21 @@ class Network(object):
     """
     An object containing a custom http client and callables
     representing the endpoints for the network.
-    Public API is all available endpoints and a psuedo private
-    custom HttpClient.
+    Public API is all available endpoints and psuedo privates
+    _client (a custom HttpClient) and _translations (a dictionary
+    to map network specific terminology to Ultima terms).
     """
 
     def __init__(self, options):
         self._client = HttpClient(baseUrl=options['baseUrl'],
                                   headers=options['headers'],
-                                  auth=options['auth']
+                                  auth=options['auth'],
+                                  status_codes=options['status_codes']
                                   )
+        if 'translations' in options:
+            self._translations = options['translations']
+        else:
+            self._translations = {}
 
     def __iter__(self):
         """
@@ -80,6 +91,7 @@ class Network(object):
 
     def setEndpoint(self, method, endpoint_options):
         """ Assign a callable to the endpoint name """
+        endpoint_options.update({'_translations': self._translations})
         setattr(self, method, Endpoint(self._client, endpoint_options))
 
     def _verifyOptions(self, options):
@@ -93,31 +105,58 @@ class Endpoint(object):
 
     def __init__(self, client, options):
         self.client = client
+        self.optional_fields = {
+            'field': "default_value",
+            'field2': {},
+        }
+        self.required_fields = ['required_field']
 
         for key, value in options.iteritems():
             setattr(self, key, value)
 
-    # this is the entry point for url and data params
-    # do call as star.network.endpoint({'url_param1':"value"}, **kwargs)
+    def _fillDefaults(self, options):
+        """
+        Raises an exception if a required field is empty.
+        Prefills sane defaults for optional fields
+        """
+        for field, value in self.optional_fields.iteritems():
+            if field not in options:
+                options[field] = value
+
+        for field, value in self.required_fields.iteritems():
+            if field not in options:
+                raise RequiredField
+
+        return options
+
     def __call__(self, *args, **kwargs):
+        """
+        this is the entry point for url and data params
+        optional unnamed parameter for url composition
+        do call as star.network.endpoint({'url_param1':"value"}, **kwargs)
+        """
         params = self._translate(kwargs)
 
-        #optional unnamed parameter for url composition
         if len(args) > 0:
             url_params = self._translate(args[0])
         else:
             url_params = self.url_defaults
 
         print params
-        self._last_args = [self.url, self.method, self.headers, params, url_params]
+        self._last_args = [self.url,
+                           self.method,
+                           self.headers,
+                           params,
+                           url_params
+                           ]
         return self.refresh()
 
     def next(self):
-        self._last_args = [self._next_url, self.method, self.headers, {}, url_params]
+        self._last_args = [self._next_url, self.method, self.headers, {}, {}]
         return self.refresh()
 
     def prev(self):
-        self._last_args = [self._prev_url, self.method, self.headers, {}, url_params]
+        self._last_args = [self._prev_url, self.method, self.headers, {}, {}]
         return self.refresh()
 
     def refresh(self):
@@ -129,24 +168,29 @@ class Endpoint(object):
         return processed_response
 
     def _processResponse(self, response):
-        # this is where an error from HttpClient would propogate
-        # unless we use exceptions, then it's already dealt with
-        # check for next key
-        # if response[self.next_key]:
-        #    self._next_url = response[self.next_key]
-        # check for prev key
-        # if response[self.prev_key]:
-        #    self._prev_url = response[self.prev_key]
+        """
+        Update state from response
+        """
+        if self.nextKey in response:
+            self._next_url = response[self.next_key]
+        if self.prevKey in response:
+            self._prev_url = response[self.prev_key]
         return response
 
     def _translate(self, options):
-        # used to change the common names for arguments to endPoint()
-        # into the names specific to this network
-        return options
+        """
+        used to change the Ultima terms for arguments
+        into the terms specific to this network
+        """
+        translated_options = {}
+        for options_key, value in options.iteritems():
+            new_key = options_key
+            if options_key in self._translations:
+                new_key = self._translations[options_key]
+            translated_options.update({new_key: value})
+        return translated_options
 
 
-# TODO: find a place for translation dictionaries.
-# this should be network wide
 ultima_options = {
     'tldr': {
         'baseUrl': "https://api.tldr.io",
@@ -157,6 +201,16 @@ ultima_options = {
                 'name': 'jakegaylor',
                 'key': "09fd8c39ae32ccf8e6ac8"
             }
+        },
+        'status_codes': {
+            'success': range(200, 299),
+            'failure': {
+                404: "URL not found"
+            }
+        },
+        'translations': {
+            #key, value = Ultima term, Network specific term
+            'rpp': "number"
         }
     },
     'codegurus': {
@@ -168,6 +222,16 @@ ultima_options = {
                 'name': 'tester',
                 'key': "09fd8c39ae32ccf8e6ac8"
             }
+        },
+        'status_codes': {
+            'success': [200],
+            'failure': {
+                404: "URL not found"
+            }
+        },
+        'translations': {
+            #key, value = Ultima term, Network specific term
+            'rpp': "number"
         }
     }
 }
@@ -178,7 +242,7 @@ endpoint_options = {
         'tldr': {
             'url': "/tldrs/latest/%(number)s",
             'url_defaults': {
-                'number': 1
+                'number': 10
             },
             'method': "get",
             'headers': {},
@@ -222,8 +286,8 @@ ultima.setEndpoint(endpoint_options)
 # print ultima.tldr.latest()
 import json
 #Example with url paramters
-#print json.dumps(ultima.tldr.latest({'number':1}))
-print json.dumps(ultima.tldr.latest())
+print json.dumps(ultima.tldr.latest({'rpp': 1}))
+# print json.dumps(ultima.tldr.latest())
 
 ## Example
 # ultima.network.endpoint()

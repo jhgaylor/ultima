@@ -2,21 +2,29 @@ import rauth
 import requests
 
 
+class MissingHttpMethod(RuntimeError):
+    """
+    A valid http method must be set to make a request
+    """
+
+
 class HttpClient(object):
     """
     An interface over the requests library.
+    Self.session is an object that adheres the requests api
+    the object should be an rauth instance if the server expects
+    an oauth token
     """
-    # self.session is an object that adheres the requests api
-    # the object should be an rauth instance if the server expects
-    # an oauth token
 
-    def __init__(self, baseUrl, headers, auth):
+    def __init__(self, baseUrl, headers, auth, status_codes):
         """
         configures client library
         """
         self.baseUrl = baseUrl
         self.headers = headers
         self.auth = None
+        self.success_codes = status_codes['success']
+        self.failure_codes = status_codes['failure']
 
         # if necessary inflate auth from a dictionary to a session
         if auth['type'] == "oauth1":
@@ -40,33 +48,39 @@ class HttpClient(object):
         Sends an authenticated request via the requests module.
         Returns a response or error object
         """
+        valid_methods = ["get", "post"]
+        if method not in valid_methods:
+            raise MissingHttpMethod
+
         url = self._composeURL(self._joinURL(self.baseUrl, partial_url),
                                url_vars
                                )
 
         response = None
 
-        if method == "get":
-            response = self.session.get(url,
-                                        params=data,
-                                        headers=self.headers.update(headers),
-                                        auth=self.auth
-                                        )
+        built_headers = dict(self.headers.items() + headers.items())
+        auth = self.auth
 
-        elif method == "post":
-            response = self.session.post(url,
-                                         data=data,
-                                         headers=self.headers.update(headers),
-                                         auth=self.auth
-                                         )
-
-        if not response:
-            # error representing failure to determine http method
-            return False
+        #this is a call to a method of self. looks kinda wonky doesn't it?
+        response = getattr(self, method)(url, data, built_headers, auth)
 
         processed_response = self._processResponse(response)
         print processed_response
         return processed_response
+
+    def get(self, url, data, headers, auth):
+        return self.session.get(url,
+                                params=data,
+                                headers=self.headers.update(headers),
+                                auth=self.auth
+                                )
+
+    def post(self, url, data, headers, auth):
+        return self.session.post(url,
+                                 data=data,
+                                 headers=headers,
+                                 auth=auth
+                                 )
 
     def _processResponse(self, response):
         """
@@ -74,21 +88,23 @@ class HttpClient(object):
         Error: {'error': type(str), 'code': type(int)}
         Success: response.json()
         """
-        # TODO: figure out errors or exceptions
-        # return data or error dictionary
-        if response.status_code >= 200:
-            # success codes should be handled here
-            if response.status_code == 200:
-                return response.json()
-        if response.status_code >= 400:
-            # default error. assumes the api returns error text as the body
-            error = {
-                'code': response.status_code,
-                'error': response.text
-            }
-            if response.status_code == 404:
-                error['error'] = "URL not found."
-            return error
+        if response.status_code in self.success_codes:
+            return response.json()
+
+        error = {
+            'code': response.status_code,
+            'error': response.text
+        }
+
+        #404 body is commonly garbage html. this is like a
+        #default error handler for 404 unless 404 is success
+        if response.status_code == 404:
+            error['error'] = "URL not found."
+
+        if response.status_code in self.failure_codes:
+            error['error'] = self.failure_codes[response.status_code]
+
+        return error
 
     def _composeURL(self, url, data):
         """
@@ -100,8 +116,9 @@ class HttpClient(object):
         """
         Returns a valid url after removing redundant forward slashes (/)
         """
-        # this should guarantee that the output is a properly formed url
-        # aka: http://google.com/ + /search == http://google.com/search
-        # not http://google.com//search
-        # someone has almost definitely written this well already.
-        return a + b
+        if a[-1:] == b[-1:] == "/":
+            return a + b[-1:]
+        elif a[-1:] != "/" and b[-1:] != "/":
+            return "/".join([a, b])
+        else:
+            return a + b
