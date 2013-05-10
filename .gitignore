@@ -2,3 +2,4 @@ node_modules
 *.pyc
 js_ideas
 *.sublime*
+driver.py
