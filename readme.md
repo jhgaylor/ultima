@@ -8,7 +8,7 @@ It's going to save you alot of time in the long term. One json document can desc
 Talk about how cool it will be to have providers describing their network and being able to create a custom client from json input in any language
 
 ## Example usage
-================
+----------------
 
 	#Send a request
     ultima.network.endpoint()
