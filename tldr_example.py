@@ -8,8 +8,8 @@ ultima_options = {
         'auth': {
             'type': 'headers',
             'headers': {
-                'name': 'jakegaylor',
-                'key': "09fd8c39ae32ccf8e6ac8"
+                'name': 'username',
+                'key': "key"
             }
         },
         'status_codes': {
@@ -88,8 +88,6 @@ endpoint_options = {
 
 ultima = Ultima(ultima_options)
 ultima.setEndpoint(endpoint_options)
-
-# print [i.latest() for i in ultima]
 
 #example of url parameters
 ultima.tldr.getLatestTldrs({'rpp': 1})
