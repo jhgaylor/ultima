@@ -1,7 +1,7 @@
 import json
 from ultima.ultima import Ultima
 
-ultima_options = {
+network_options = {
     'tldr': {
         'baseUrl': "https://api.tldr.io",
         'headers': {},
@@ -86,7 +86,7 @@ endpoint_options = {
 }
 
 
-ultima = Ultima(ultima_options)
+ultima = Ultima(network_options)
 ultima.setEndpoint(endpoint_options)
 
 #example of url parameters

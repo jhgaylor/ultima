@@ -77,6 +77,31 @@ Dictionary mapping Ultima terms to Network terms
 
 ##Endpoint options
 
+    endpoint_options = {
+        'getLatestTldrs': {
+            'tldr': {
+                'url': "/tldrs/latest/%(number)s",
+                'url_defaults': {
+                    'number': 10
+                },
+                'method': "get",
+                'headers': {},
+                'nextKey': None,
+                'prevKey': None
+            },
+        },
+        'searchByUrl': {
+            'tldr': {
+                'url': "/tldrs/search/",
+                'method': "get",
+                'headers': {},
+                'nextKey': None,
+                'prevKey': None
+            },
+        },
+        ...
+    }
+
 ####Required:
 -------------
 ##### url
