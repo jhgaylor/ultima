@@ -55,35 +55,24 @@
 <dl class="class">
 <dt id="ultima.httpclient.HttpClient">
 <em class="property">class </em><tt class="descclassname">ultima.httpclient.</tt><tt class="descname">HttpClient</tt><big>(</big><em>baseUrl</em>, <em>headers</em>, <em>auth</em>, <em>status_codes</em><big>)</big><a class="reference internal" href="_modules/ultima/httpclient.html#HttpClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.httpclient.HttpClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>An interface over the requests library.
-Self.session is an object that adheres the requests api
+<dd><p>An interface over the requests library.</p>
+<p>You will almost certainly not call this class manually.</p>
+<p>Self.session is an object that adheres the requests api
 the object should be an rauth instance if the server expects
 an oauth token</p>
 <dl class="method">
 <dt id="ultima.httpclient.HttpClient.call">
 <tt class="descname">call</tt><big>(</big><em>partial_url</em>, <em>method</em>, <em>headers</em>, <em>data</em>, <em>url_vars</em>, <em>form_encoding</em><big>)</big><a class="reference internal" href="_modules/ultima/httpclient.html#HttpClient.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.httpclient.HttpClient.call" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sends an authenticated request via the requests module.
-Returns a response or error object</p>
+<dd><p>Sends an authenticated request via the requests module.</p>
+<p>Returns a data or error dictionary</p>
 </dd></dl>
-
-<dl class="method">
-<dt id="ultima.httpclient.HttpClient.get">
-<tt class="descname">get</tt><big>(</big><em>url</em>, <em>data</em>, <em>headers</em>, <em>auth</em><big>)</big><a class="reference internal" href="_modules/ultima/httpclient.html#HttpClient.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.httpclient.HttpClient.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="ultima.httpclient.HttpClient.post">
-<tt class="descname">post</tt><big>(</big><em>url</em>, <em>data</em>, <em>headers</em>, <em>auth</em><big>)</big><a class="reference internal" href="_modules/ultima/httpclient.html#HttpClient.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.httpclient.HttpClient.post" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="exception">
 <dt id="ultima.httpclient.MissingHttpMethod">
 <em class="property">exception </em><tt class="descclassname">ultima.httpclient.</tt><tt class="descname">MissingHttpMethod</tt><a class="reference internal" href="_modules/ultima/httpclient.html#MissingHttpMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.httpclient.MissingHttpMethod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.RuntimeError</span></tt></p>
-<p>A valid http method must be set to make a request</p>
+<dd><p>A valid http method must be set to make a request</p>
 </dd></dl>
 
 </div>
@@ -92,22 +81,30 @@ Returns a response or error object</p>
 <dl class="class">
 <dt id="ultima.ultima.Endpoint">
 <em class="property">class </em><tt class="descclassname">ultima.ultima.</tt><tt class="descname">Endpoint</tt><big>(</big><em>client</em>, <em>options</em><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Endpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Callable</p>
+<dd><p>Callable</p>
 <dl class="method">
 <dt id="ultima.ultima.Endpoint.call">
 <tt class="descname">call</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#ultima.ultima.Endpoint.call" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Entry point for url and data params</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>url_defaults</strong> &#8211; Optional positional argument defining default url named parameters.</li>
+<li><strong>kwargs</strong> &#8211; payload for requests.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-<dl class="method">
-<dt id="ultima.ultima.Endpoint.next">
-<tt class="descname">next</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Endpoint.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Endpoint.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="ultima.ultima.Endpoint.prev">
-<tt class="descname">prev</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Endpoint.prev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Endpoint.prev" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="attribute">
+<dt id="ultima.ultima.Endpoint.optional_fields">
+<tt class="descname">optional_fields</tt><em class="property"> = {'url_defaults': {}, 'headers': {}, 'form_encoding': True, 'prevKey': None, 'nextKey': None}</em><a class="headerlink" href="#ultima.ultima.Endpoint.optional_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>the optional keys for the json input to construct an endpoint</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ultima.ultima.Endpoint.refresh">
@@ -115,17 +112,44 @@ Returns a response or error object</p>
 <dd><p>Sends the last request again.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="ultima.ultima.Endpoint.required_fields">
+<tt class="descname">required_fields</tt><em class="property"> = ['url', 'method']</em><a class="headerlink" href="#ultima.ultima.Endpoint.required_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>the required keys for the json input to construct an endpoint</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="ultima.ultima.Network">
 <em class="property">class </em><tt class="descclassname">ultima.ultima.</tt><tt class="descname">Network</tt><big>(</big><em>options</em><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Network" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>An object containing a custom http client and callables
-representing the endpoints for the network.
-Public API is all available endpoints and psuedo privates
-_client (a custom HttpClient) and _translations (a dictionary
-to map network specific terminology to Ultima terms).</p>
+<dd><p>An object containing a custom http client and callables
+representing the endpoints for the network.</p>
+<p>Dynamic Public API is all available endpoints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_client</strong> &#8211; a custom HttpClient</li>
+<li><strong>_translations</strong> &#8211; a dictionary to map network specific terminology to Ultima terms</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="ultima.ultima.Network.optional_fields">
+<tt class="descname">optional_fields</tt><em class="property"> = {'headers': {}, 'translations': {}, 'auth': None}</em><a class="headerlink" href="#ultima.ultima.Network.optional_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class variable. The optional keys for the json input to construct an network</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ultima.ultima.Network.required_fields">
+<tt class="descname">required_fields</tt><em class="property"> = ['baseUrl', 'status_codes']</em><a class="headerlink" href="#ultima.ultima.Network.required_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class variable. The required keys for the json input to construct an network</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="ultima.ultima.Network.setEndpoint">
 <tt class="descname">setEndpoint</tt><big>(</big><em>method</em>, <em>endpoint_options</em><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Network.setEndpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Network.setEndpoint" title="Permalink to this definition">¶</a></dt>
@@ -137,22 +161,22 @@ to map network specific terminology to Ultima terms).</p>
 <dl class="exception">
 <dt id="ultima.ultima.RequiredField">
 <em class="property">exception </em><tt class="descclassname">ultima.ultima.</tt><tt class="descname">RequiredField</tt><a class="reference internal" href="_modules/ultima/ultima.html#RequiredField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.RequiredField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
-<p>This field is required for instantiation</p>
+<dd><p>This field is required for instantiation</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="ultima.ultima.Ultima">
 <em class="property">class </em><tt class="descclassname">ultima.ultima.</tt><tt class="descname">Ultima</tt><big>(</big><em>options</em><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Ultima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Ultima" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>A Common interface for creating networks and endpoints.
-Public API is only the available networks</p>
-<p>Iteration returns networks</p>
+<dd><p>A Common interface for creating networks and endpoints.
+Dynamic Public API is the available networks.</p>
+<p>Create a network w/ options for each key, value pair in options.</p>
+<p>Iteration returns the networks created during instantiation.</p>
 <dl class="method">
 <dt id="ultima.ultima.Ultima.setEndpoint">
 <tt class="descname">setEndpoint</tt><big>(</big><em>options</em><big>)</big><a class="reference internal" href="_modules/ultima/ultima.html#Ultima.setEndpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ultima.ultima.Ultima.setEndpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an endpoint on each network w/ options for each key.
-{ method: { network1: {options}, network2: {options} }</p>
+<dd><p>Calls an setEndpoint on each network w/ options for each key.</p>
+<p>Options is of the form:</p>
+<p>{ method: { network1: {options}, network2: {options} }</p>
 </dd></dl>
 
 </dd></dl>
