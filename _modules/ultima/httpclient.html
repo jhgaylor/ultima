@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ultima.httpclient &mdash; Ultima 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Ultima 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Ultima 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for ultima.httpclient</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">rauth</span>
+
+
+<div class="viewcode-block" id="MissingHttpMethod"><a class="viewcode-back" href="../../ultima.html#ultima.httpclient.MissingHttpMethod">[docs]</a><span class="k">class</span> <span class="nc">MissingHttpMethod</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A valid http method must be set to make a request</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+</div>
+<div class="viewcode-block" id="HttpClient"><a class="viewcode-back" href="../../ultima.html#ultima.httpclient.HttpClient">[docs]</a><span class="k">class</span> <span class="nc">HttpClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An interface over the requests library.</span>
+<span class="sd">    Self.session is an object that adheres the requests api</span>
+<span class="sd">    the object should be an rauth instance if the server expects</span>
+<span class="sd">    an oauth token</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baseUrl</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">status_codes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        configures client library</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baseUrl</span> <span class="o">=</span> <span class="n">baseUrl</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success_codes</span> <span class="o">=</span> <span class="n">status_codes</span><span class="p">[</span><span class="s">&#39;success&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failure_codes</span> <span class="o">=</span> <span class="n">status_codes</span><span class="p">[</span><span class="s">&#39;failure&#39;</span><span class="p">]</span>
+
+        <span class="c"># if necessary inflate auth from a dictionary to a session</span>
+        <span class="k">if</span> <span class="n">auth</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;oauth1&quot;</span><span class="p">:</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">rauth</span><span class="o">.</span><span class="n">OAuth1Service</span><span class="p">(</span><span class="o">**</span><span class="n">auth</span><span class="p">[</span><span class="s">&#39;session&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="k">elif</span> <span class="n">auth</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;oauth2&quot;</span><span class="p">:</span>
+            <span class="n">session</span> <span class="o">=</span> <span class="n">rauth</span><span class="o">.</span><span class="n">OAuth2Service</span><span class="p">(</span><span class="o">**</span><span class="n">auth</span><span class="p">[</span><span class="s">&#39;session&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span>
+
+        <span class="c"># if the auth mechanism is headers or api key</span>
+        <span class="k">if</span> <span class="n">auth</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;headers&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">auth</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">auth</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;basic&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">auth</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="HttpClient.call"><a class="viewcode-back" href="../../ultima.html#ultima.httpclient.HttpClient.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">partial_url</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">url_vars</span><span class="p">,</span> <span class="n">form_encoding</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends an authenticated request via the requests module.</span>
+<span class="sd">        Returns a response or error object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valid_methods</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;get&quot;</span><span class="p">,</span> <span class="s">&quot;post&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_methods</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MissingHttpMethod</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_composeURL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_joinURL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseUrl</span><span class="p">,</span> <span class="n">partial_url</span><span class="p">),</span>
+                               <span class="n">url_vars</span>
+                               <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">built_headers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">+</span> <span class="n">headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span>
+
+        <span class="c">#this is a call to a method of self. looks kinda wonky doesn&#39;t it?</span>
+        <span class="k">if</span> <span class="n">form_encoding</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">built_headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
+
+        <span class="n">processed_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processResponse</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">processed_response</span>
+</div>
+<div class="viewcode-block" id="HttpClient.get"><a class="viewcode-back" href="../../ultima.html#ultima.httpclient.HttpClient.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+                                <span class="n">params</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                                <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">headers</span><span class="p">),</span>
+                                <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span>
+                                <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="HttpClient.post"><a class="viewcode-back" href="../../ultima.html#ultima.httpclient.HttpClient.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+                                 <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                                 <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+                                 <span class="n">auth</span><span class="o">=</span><span class="n">auth</span>
+                                 <span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_processResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary representation of the response.</span>
+<span class="sd">        Error: {&#39;error&#39;: type(str), &#39;code&#39;: type(int)}</span>
+<span class="sd">        Success: response.json()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_codes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
+            <span class="s">&#39;error&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+        <span class="p">}</span>
+
+        <span class="c">#404 body is commonly garbage html. this is like a</span>
+        <span class="c">#default error handler for 404 unless 404 is success</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">[</span><span class="s">&#39;error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;URL not found.&quot;</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_codes</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">[</span><span class="s">&#39;error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_codes</span><span class="p">[</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">error</span>
+
+    <span class="k">def</span> <span class="nf">_composeURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses python named string composition from dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">url</span> <span class="o">%</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_joinURL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a valid url after removing redundant forward slashes (/)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">==</span> <span class="s">&quot;/&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">elif</span> <span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="s">&quot;/&quot;</span> <span class="ow">and</span> <span class="n">b</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="s">&quot;/&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Ultima 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Jake Gaylor.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

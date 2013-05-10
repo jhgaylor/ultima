@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ultima.ultima &mdash; Ultima 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Ultima 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Ultima 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for ultima.ultima</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">.httpclient</span> <span class="kn">import</span> <span class="n">HttpClient</span>
+
+
+<span class="k">def</span> <span class="nf">_</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="n">s</span>
+
+
+<div class="viewcode-block" id="RequiredField"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.RequiredField">[docs]</a><span class="k">class</span> <span class="nc">RequiredField</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This field is required for instantiation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+</div>
+<div class="viewcode-block" id="Ultima"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Ultima">[docs]</a><span class="k">class</span> <span class="nc">Ultima</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Common interface for creating networks and endpoints.</span>
+<span class="sd">    Public API is only the available networks</span>
+
+<span class="sd">    Iteration returns networks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a network w/ options for each key, value</span>
+<span class="sd">        pair in options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verifyOptions</span><span class="p">(</span><span class="n">options</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span>
+
+        <span class="k">for</span> <span class="n">network</span><span class="p">,</span> <span class="n">network_options</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">Network</span><span class="p">(</span><span class="n">network_options</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterable to make it easy to call .endpoint of every network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Ultima.setEndpoint"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Ultima.setEndpoint">[docs]</a>    <span class="k">def</span> <span class="nf">setEndpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an endpoint on each network w/ options for each key.</span>
+<span class="sd">        { method: { network1: {options}, network2: {options} }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">networks</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">network</span><span class="p">,</span> <span class="n">network_options</span> <span class="ow">in</span> <span class="n">networks</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">)</span><span class="o">.</span><span class="n">setEndpoint</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">network_options</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_verifyOptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raise exeption if options contains an invalid key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reserved_words</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;and&quot;</span><span class="p">,</span> <span class="s">&quot;del&quot;</span><span class="p">,</span> <span class="s">&quot;for&quot;</span><span class="p">,</span> <span class="s">&quot;is&quot;</span><span class="p">,</span> <span class="s">&quot;raise&quot;</span><span class="p">,</span> <span class="s">&quot;assert&quot;</span><span class="p">,</span>
+                          <span class="s">&quot;elif&quot;</span><span class="p">,</span> <span class="s">&quot;from&quot;</span><span class="p">,</span> <span class="s">&quot;lambda&quot;</span><span class="p">,</span> <span class="s">&quot;return&quot;</span><span class="p">,</span> <span class="s">&quot;break&quot;</span><span class="p">,</span>
+                          <span class="s">&quot;else&quot;</span><span class="p">,</span> <span class="s">&quot;global&quot;</span><span class="p">,</span> <span class="s">&quot;not&quot;</span><span class="p">,</span> <span class="s">&quot;try&quot;</span><span class="p">,</span> <span class="s">&quot;class&quot;</span><span class="p">,</span> <span class="s">&quot;except&quot;</span><span class="p">,</span>
+                          <span class="s">&quot;if&quot;</span><span class="p">,</span> <span class="s">&quot;or&quot;</span><span class="p">,</span> <span class="s">&quot;while&quot;</span><span class="p">,</span> <span class="s">&quot;continue&quot;</span><span class="p">,</span> <span class="s">&quot;exec&quot;</span><span class="p">,</span> <span class="s">&quot;import&quot;</span><span class="p">,</span>
+                          <span class="s">&quot;pass&quot;</span><span class="p">,</span> <span class="s">&quot;yield&quot;</span><span class="p">,</span> <span class="s">&quot;def&quot;</span><span class="p">,</span> <span class="s">&quot;finally&quot;</span><span class="p">,</span> <span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="s">&quot;print&quot;</span>
+                          <span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">reserved_words</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+</div>
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An object containing a custom http client and callables</span>
+<span class="sd">    representing the endpoints for the network.</span>
+<span class="sd">    Public API is all available endpoints and psuedo privates</span>
+<span class="sd">    _client (a custom HttpClient) and _translations (a dictionary</span>
+<span class="sd">    to map network specific terminology to Ultima terms).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="c">#TODO: remove unwanted keys from options?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s">&#39;auth&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;translations&#39;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;baseUrl&#39;</span><span class="p">,</span> <span class="s">&#39;status_codes&#39;</span><span class="p">]</span>
+
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillDefaults</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">baseUrl</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s">&#39;baseUrl&#39;</span><span class="p">],</span>
+                                  <span class="n">headers</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">],</span>
+                                  <span class="n">auth</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s">&#39;auth&#39;</span><span class="p">],</span>
+                                  <span class="n">status_codes</span><span class="o">=</span><span class="n">options</span><span class="p">[</span><span class="s">&#39;status_codes&#39;</span><span class="p">]</span>
+                                  <span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;translations&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s">&#39;translations&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterable to be consistant with Ultima</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;_&quot;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_fillDefaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises an exception if a required field is empty.</span>
+<span class="sd">        Prefills sane defaults for optional fields</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optional_fields</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+                <span class="n">options</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">RequiredField</span>
+
+        <span class="k">return</span> <span class="n">options</span>
+
+<div class="viewcode-block" id="Network.setEndpoint"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Network.setEndpoint">[docs]</a>    <span class="k">def</span> <span class="nf">setEndpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">endpoint_options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Assign a callable to the endpoint name &quot;&quot;&quot;</span>
+        <span class="n">endpoint_options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;_translations&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span><span class="p">})</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">Endpoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">endpoint_options</span><span class="p">))</span>
+</div>
+    <span class="k">def</span> <span class="nf">_verifyOptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raise exeption if options contains an invalid key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">options</span>
+
+</div>
+<div class="viewcode-block" id="Endpoint"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Endpoint">[docs]</a><span class="k">class</span> <span class="nc">Endpoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="c">#TODO: remove unwanted keys from options?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;url_defaults&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s">&#39;headers&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s">&#39;form_encoding&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s">&#39;nextKey&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;prevKey&#39;</span><span class="p">:</span> <span class="bp">None</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="s">&#39;method&#39;</span><span class="p">]</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fillDefaults</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        this is the entry point for url and data params</span>
+<span class="sd">        optional unnamed parameter for url composition</span>
+<span class="sd">        do call as star.network.endpoint({&#39;url_param1&#39;:&quot;value&quot;}, **kwargs)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translate</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">url_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translate</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_defaults</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+                           <span class="n">params</span><span class="p">,</span>
+                           <span class="n">url_params</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">form_encoding</span>
+                           <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Endpoint.next"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Endpoint.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_next_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{}]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Endpoint.prev"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Endpoint.prev">[docs]</a>    <span class="k">def</span> <span class="nf">prev</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{}]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Endpoint.refresh"><a class="viewcode-back" href="../../ultima.html#ultima.ultima.Endpoint.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends the last request again.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_args</span><span class="p">)</span>
+        <span class="n">processed_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processResponse</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">processed_response</span>
+</div>
+    <span class="k">def</span> <span class="nf">_fillDefaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises an exception if a required field is empty.</span>
+<span class="sd">        Prefills sane defaults for optional fields</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optional_fields</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+                <span class="n">options</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">RequiredField</span>
+
+        <span class="k">return</span> <span class="n">options</span>
+
+    <span class="k">def</span> <span class="nf">_processResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update state from response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#TODO: let next and prev key contain . to drill down</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextKey</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_next_url</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prevKey</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prev_url</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prev_key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span> <span class="nf">_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        used to change the Ultima terms for arguments</span>
+<span class="sd">        into the terms specific to this network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">translated_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">options_key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">new_key</span> <span class="o">=</span> <span class="n">options_key</span>
+            <span class="k">if</span> <span class="n">options_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span><span class="p">:</span>
+                <span class="n">new_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_translations</span><span class="p">[</span><span class="n">options_key</span><span class="p">]</span>
+            <span class="n">translated_options</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">new_key</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">translated_options</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Ultima 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Jake Gaylor.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
