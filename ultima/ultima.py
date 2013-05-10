@@ -14,9 +14,11 @@ class RequiredField(Exception):
 class Ultima(object):
     """
     A Common interface for creating networks and endpoints.
-    Public API is only the available networks
+    Dynamic Public API is the available networks.
 
-    Iteration returns networks
+    Create a network w/ options for each key, value pair in options.
+
+    Iteration returns the networks created during instantiation.
     """
     def __init__(self, options):
         """
@@ -38,7 +40,10 @@ class Ultima(object):
 
     def setEndpoint(self, options):
         """
-        Create an endpoint on each network w/ options for each key.
+        Calls an setEndpoint on each network w/ options for each key.
+
+        Options is of the form:
+
         { method: { network1: {options}, network2: {options} }
         """
         for method, networks in options.iteritems():
@@ -65,19 +70,24 @@ class Network(object):
     """
     An object containing a custom http client and callables
     representing the endpoints for the network.
-    Public API is all available endpoints and psuedo privates
-    _client (a custom HttpClient) and _translations (a dictionary
-    to map network specific terminology to Ultima terms).
+
+    Dynamic Public API is all available endpoints.
+
+    :ivar _client: a custom HttpClient
+    :ivar _translations: a dictionary to map network specific terminology to Ultima terms
     """
+    #: Class variable. The optional keys for the json input to construct an network
+    optional_fields = {
+        'headers': {},
+        'auth': None,
+        'translations': {}
+    }
+
+    #: Class variable. The required keys for the json input to construct an network
+    required_fields = ['baseUrl', 'status_codes']
 
     def __init__(self, options):
         #TODO: remove unwanted keys from options?
-        self.optional_fields = {
-            'headers': {},
-            'auth': None,
-            'translations': {}
-        }
-        self.required_fields = ['baseUrl', 'status_codes']
 
         options = self._fillDefaults(options)
 
@@ -130,29 +140,35 @@ class Endpoint(object):
     """
     Callable
     """
+    #: the optional keys for the json input to construct an endpoint
+    optional_fields = {
+        'url_defaults': {},
+        'headers': {},
+        'form_encoding': True,
+        'nextKey': None,
+        'prevKey': None
+    }
 
+    #: the required keys for the json input to construct an endpoint
+    required_fields = ['url', 'method']
     def __init__(self, client, options):
         #TODO: remove unwanted keys from options?
         self.client = client
 
-        self.optional_fields = {
-            'url_defaults': {},
-            'headers': {},
-            'form_encoding': True,
-            'nextKey': None,
-            'prevKey': None
-        }
-        self.required_fields = ['url', 'method']
         options = self._fillDefaults(options)
 
         for key, value in options.iteritems():
             setattr(self, key, value)
 
     def __call__(self, *args, **kwargs):
+        return self.call(*args, **kwargs)
+
+    def call(self, *args, **kwargs):
         """
-        this is the entry point for url and data params
-        optional unnamed parameter for url composition
-        do call as star.network.endpoint({'url_param1':"value"}, **kwargs)
+        Entry point for url and data params
+
+        :ivar url_defaults: Optional positional argument defining default url named parameters.
+        :ivar kwargs: payload for requests.
         """
         params = self._translate(kwargs)
 
@@ -171,12 +187,20 @@ class Endpoint(object):
         return self.refresh()
 
     def next(self):
-        self._last_args = [self._next_url, self.method, self.headers, {}, {}]
-        return self.refresh()
+        #TODO: this needs to be fixed because the baseUrl is present twice
+        if self._next_url:
+            self._last_args = [self._next_url, self.method, self.headers, {}, {}]
+            return self.refresh()
+        else:
+            return False
 
     def prev(self):
-        self._last_args = [self._prev_url, self.method, self.headers, {}, {}]
-        return self.refresh()
+        #TODO: this needs to be fixed because the baseUrl is present twice
+        if self._prev_url:
+            self._last_args = [self._prev_url, self.method, self.headers, {}, {}]
+            return self.refresh()
+        else:
+            return False
 
     def refresh(self):
         """

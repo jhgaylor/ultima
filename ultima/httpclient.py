@@ -12,6 +12,9 @@ class MissingHttpMethod(RuntimeError):
 class HttpClient(object):
     """
     An interface over the requests library.
+
+    You will almost certainly not call this class manually.
+
     Self.session is an object that adheres the requests api
     the object should be an rauth instance if the server expects
     an oauth token
@@ -47,7 +50,8 @@ class HttpClient(object):
     def call(self, partial_url, method, headers, data, url_vars, form_encoding):
         """
         Sends an authenticated request via the requests module.
-        Returns a response or error object
+
+        Returns a data or error dictionary
         """
         valid_methods = ["get", "post"]
         if method not in valid_methods:
@@ -73,8 +77,8 @@ class HttpClient(object):
     def get(self, url, data, headers, auth):
         return self.session.get(url,
                                 params=data,
-                                headers=self.headers.update(headers),
-                                auth=self.auth
+                                headers=headers,
+                                auth=auth
                                 )
 
     def post(self, url, data, headers, auth):

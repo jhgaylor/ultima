@@ -1,26 +1,22 @@
-# Example usage
+## Example usage
 
-Send a request
-
+	#Send a request
     ultima.network.endpoint()
 
-Sends the previous request again
-
+	#Sends the previous request again
     ultima.network.endpoint.refresh()
 
-if the next key was available, goes to the next page
-
+	#if the next key was available, goes to the next page
     ultima.network.endpoint.next()
 
-if the prev key was available, goes to the prev page
-
+	#if the prev key was available, goes to the prev page
     ultima.network.endpoint.prev()
 
-# Network options
+## Network options
 
-## Required:
-
-### baseUrl
+### Required:
+-------
+#### baseUrl
 The static portion of the network's api url.
 can contain variables
 

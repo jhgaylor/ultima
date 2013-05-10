@@ -90,25 +90,25 @@ ultima = Ultima(ultima_options)
 ultima.setEndpoint(endpoint_options)
 
 #example of url parameters
-ultima.tldr.getLatestTldrs({'rpp': 1})
+print ultima.tldr.getLatestTldrs({'rpp': 1})
 
-#example of payload
-ultima.tldr.searchByUrl(url="http://tldr.io")
+# #example of payload
+# ultima.tldr.searchByUrl(url="http://tldr.io")
 
-#example of payload
-ultima.tldr.searchBatch(batch=["http://tldr.io",
-                               "http://news.ycombinator.com/"
-                               ]
-                        )
+# #example of payload
+# ultima.tldr.searchBatch(batch=["http://tldr.io",
+#                                "http://news.ycombinator.com/"
+#                                ]
+#                         )
 
-#example of url parameters
-ultima.tldr.getUser({'username': "jhgaylor"})
+# #example of url parameters
+# ultima.tldr.getUser({'username': "jhgaylor"})
 
-#example of url parameters
-ultima.tldr.getUserTldrs({'username': "jhgaylor"})
+# #example of url parameters
+# ultima.tldr.getUserTldrs({'username': "jhgaylor"})
 
-#example w/o parameters
-ultima.tldr.getCategories()
+# #example w/o parameters
+# ultima.tldr.getCategories()
 
-#example of payload
-ultima.tldr.getLatestTldrs(category="tech-news")
+# #example of payload
+# ultima.tldr.getLatestTldrs(category="tech-news")
