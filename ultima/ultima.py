@@ -71,6 +71,15 @@ class Network(object):
     """
 
     def __init__(self, options):
+        self.optional_fields = {
+            'headers': {},
+            'auth': None,
+            'translations': {}
+        }
+        self.required_fields = ['baseUrl', 'status_codes']
+
+        options = self._fillDefaults(options)
+
         self._client = HttpClient(baseUrl=options['baseUrl'],
                                   headers=options['headers'],
                                   auth=options['auth'],
@@ -89,6 +98,21 @@ class Network(object):
             if key[0] != "_":
                 yield value
 
+    def _fillDefaults(self, options):
+        """
+        Raises an exception if a required field is empty.
+        Prefills sane defaults for optional fields
+        """
+        for field, value in self.optional_fields.iteritems():
+            if field not in options:
+                options[field] = value
+
+        for field, value in self.required_fields.iteritems():
+            if field not in options:
+                raise RequiredField
+
+        return options
+
     def setEndpoint(self, method, endpoint_options):
         """ Assign a callable to the endpoint name """
         endpoint_options.update({'_translations': self._translations})
@@ -105,29 +129,17 @@ class Endpoint(object):
 
     def __init__(self, client, options):
         self.client = client
+
         self.optional_fields = {
-            'field': "default_value",
-            'field2': {},
+            'headers': {},
+            'nextKey': None,
+            'prevKey': None
         }
-        self.required_fields = ['required_field']
+        self.required_fields = ['url', 'method']
+        options = self._fillDefaults(options)
 
         for key, value in options.iteritems():
             setattr(self, key, value)
-
-    def _fillDefaults(self, options):
-        """
-        Raises an exception if a required field is empty.
-        Prefills sane defaults for optional fields
-        """
-        for field, value in self.optional_fields.iteritems():
-            if field not in options:
-                options[field] = value
-
-        for field, value in self.required_fields.iteritems():
-            if field not in options:
-                raise RequiredField
-
-        return options
 
     def __call__(self, *args, **kwargs):
         """
@@ -167,10 +179,26 @@ class Endpoint(object):
         processed_response = self._processResponse(response)
         return processed_response
 
+    def _fillDefaults(self, options):
+        """
+        Raises an exception if a required field is empty.
+        Prefills sane defaults for optional fields
+        """
+        for field, value in self.optional_fields.iteritems():
+            if field not in options:
+                options[field] = value
+
+        for field, value in self.required_fields.iteritems():
+            if field not in options:
+                raise RequiredField
+
+        return options
+
     def _processResponse(self, response):
         """
         Update state from response
         """
+        #TODO: let next and prev key contain . to drill down
         if self.nextKey in response:
             self._next_url = response[self.next_key]
         if self.prevKey in response:
