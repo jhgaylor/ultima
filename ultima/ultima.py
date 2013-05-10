@@ -71,6 +71,7 @@ class Network(object):
     """
 
     def __init__(self, options):
+        #TODO: remove unwanted keys from options?
         self.optional_fields = {
             'headers': {},
             'auth': None,
@@ -128,6 +129,7 @@ class Network(object):
 class Endpoint(object):
 
     def __init__(self, client, options):
+        #TODO: remove unwanted keys from options?
         self.client = client
 
         self.optional_fields = {
