@@ -1,3 +1,12 @@
+#What is it?
+A tool to process json into an api client
+
+#Why do I want it?
+
+It's going to save you alot of time in the long term. One json document can describe the server implementation of the api while allowing the client to be built pretty much however.
+
+Talk about how cool it will be to have providers describing their network and being able to create a custom client from json input in any language
+
 ## Example usage
 
 	#Send a request
@@ -12,15 +21,15 @@
 	#if the prev key was available, goes to the prev page
     ultima.network.endpoint.prev()
 
-## Network options
+### Network options
 
-### Required:
--------
-#### baseUrl
+#### Required:
+--------------
+##### baseUrl
 The static portion of the network's api url.
 can contain variables
 
-### status_codes
+##### status_codes
 
 Hash of success and failure codes
 
@@ -34,40 +43,40 @@ Success codes will return the object from the json of the response body.
         }
     }
 
-## Optional:
-
-### headers
+#### Optional:
+--------------
+##### headers
 Dictionary of http headers
 
-### auth
+##### auth
 Auth settings.
 
-### translations
+##### translations
 Dictionary mapping Ultima terms to Network terms
 
-#Endpoint options
+##Endpoint options
 
-##Required:
-
-### url
+####Required:
+-------------
+##### url
 url stub w/ variables using python named string replacement
 
-### method
+##### method
 HTTP method for request
 
-## Optional:
-
-### headers
+#### Optional:
+--------------
+##### headers
 Dictionary of http headers to be added to network.headers
 
-### url_defaults
+##### url_defaults
 Dictionary of default url parameter values
 
-### form_encoding
+##### form_encoding
 Defaults to true.  set false to send json string instead
 
-### nextKey
+##### nextKey
 A key to find in the json data to the next page of results
 
-### prevKey
+##### prevKey
 A key to find in the json data to the prev page of results
