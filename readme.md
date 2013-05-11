@@ -5,7 +5,7 @@ A tool to process json into an api client
 
 It's going to save you alot of time in the long term. One json document can describe the server implementation of the api while allowing the client to be built pretty much however.
 
-Talk about how cool it will be to have providers describing their network and being able to create a custom client from json input in any language
+Think about how cool it will be to have providers describing their network and being able to create a custom client from json input in any language for which this tool is available.
 
 ## Example usage
 ----------------
