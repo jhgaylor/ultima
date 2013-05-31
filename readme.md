@@ -9,6 +9,11 @@ Think about how cool it will be to have providers describing their network and b
 
 ## Example usage
 ----------------
+    #import the client
+    from ultima.ultima import Ultima
+
+    #instatiate a client
+    ultima = Ultima(network_options)
 
 	#Send a request
     ultima.network.endpoint()
