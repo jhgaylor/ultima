@@ -24,11 +24,12 @@ class HttpClient(object):
         """
         configures client library
         """
-        self.baseUrl = baseUrl
-        self.headers = headers
-        self.auth = None
+        self.baseUrl = baseUrl  # the root of the target url
+        self.headers = headers  # a dictionary of header key value pairs
+        self.auth = None  # an auth object compatible with requests
         self.success_codes = status_codes['success']
         self.failure_codes = status_codes['failure']
+        self.extras = {}
 
         # if necessary inflate auth from a dictionary to a session
         if auth['type'] == "oauth1":
@@ -40,10 +41,13 @@ class HttpClient(object):
         else:
             self.session = requests
 
-        # if the auth mechanism is headers or api key
+        # auth to be send via headers
         if auth['type'] == "headers":
             self.headers.update(auth['headers'])
-
+        # auth to be send as extra data
+        if auth['type'] == "apikey":
+            self.extras.update(auth['apikey'])
+        # auth object is HTTP Basic Authentication
         if auth['type'] == "basic":
             self.auth = tuple(auth['headers'])
 
@@ -62,12 +66,18 @@ class HttpClient(object):
 
         response = None
 
+        # combine to dictionaries without modifying either
         built_headers = dict(self.headers.items() + headers.items())
+
         auth = self.auth
 
-        #this is a call to a method of self. looks kinda wonky doesn't it?
+        # inject data with extras (apikey auth)
+        data.update(self.extras)
+
+        # if the form needs to be sent as json data
         if form_encoding:
             data = json.dumps(data)
+        # this is a call to a method of self. looks kinda wonky doesn't it?
         response = getattr(self, method)(url, data, built_headers, auth)
 
         processed_response = self._processResponse(response)
