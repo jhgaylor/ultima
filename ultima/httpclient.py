@@ -66,7 +66,7 @@ class HttpClient(object):
                                )
 
         if self.debug is True:
-            print "for debug purposes the url targetted is:\n"
+            print "for debug purposes the url targetted is:"
             print url
             print "*" * 30
 
@@ -85,6 +85,11 @@ class HttpClient(object):
             data = json.dumps(data)
         # this is a call to a method of self. looks kinda wonky doesn't it?
         response = getattr(self, method)(url, data, built_headers, auth)
+
+        if self.debug is True:
+            print "for debug purposes the url targetted is:"
+            print response.url
+            print "*" * 30
 
         processed_response = self._processResponse(response)
 

@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "Ultima",
-    version = "0.1.2",
+    version = "0.1.3",
     author = "Jake Gaylor",
     author_email = "jake@codegur.us",
     description = "It's like SOAP for JSON.",
