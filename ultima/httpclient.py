@@ -97,6 +97,7 @@ class HttpClient(object):
         return processed_response
 
     def get(self, url, data, headers, auth):
+        print data
         return self.session.get(url,
                                 params=data,
                                 headers=headers,
