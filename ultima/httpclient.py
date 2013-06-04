@@ -65,10 +65,11 @@ class HttpClient(object):
                                url_vars
                                )
 
-        if self.debug = True:
+        if self.debug is True:
             print "for debug purposes the url targetted is:\n"
             print url
-            print "*"*30
+            print "*" * 30
+
         response = None
 
         # combine to dictionaries without modifying either
