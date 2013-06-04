@@ -30,6 +30,7 @@ class HttpClient(object):
         self.success_codes = status_codes['success']
         self.failure_codes = status_codes['failure']
         self.extras = {}
+        self.debug = False
 
         # if necessary inflate auth from a dictionary to a session
         if auth['type'] == "oauth1":
@@ -64,6 +65,10 @@ class HttpClient(object):
                                url_vars
                                )
 
+        if self.debug = True:
+            print "for debug purposes the url targetted is:\n"
+            print url
+            print "*"*30
         response = None
 
         # combine to dictionaries without modifying either
