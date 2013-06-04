@@ -78,8 +78,9 @@ class HttpClient(object):
         auth = self.auth
 
         # inject data with extras (apikey auth)
+        print data
         data.update(self.extras)
-
+        print data
         # if the form needs to be sent as json data
         if form_encoding:
             data = json.dumps(data)
