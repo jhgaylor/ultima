@@ -134,13 +134,8 @@ class HttpClient(object):
         """
         return (url % data)
 
-    def _joinURL(self, a, b):
+    def _joinURL(self, *args):
         """
         Returns a valid url after removing redundant forward slashes (/)
         """
-        if a[-1:] == b[-1:] == "/":
-            return a + b[-1:]
-        elif a[-1:] != "/" and b[-1:] != "/":
-            return "/".join([a, b])
-        else:
-            return a + b
+        return "/".join([arg.strip("/") for arg in args])
