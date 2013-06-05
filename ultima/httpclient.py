@@ -64,12 +64,6 @@ class HttpClient(object):
         url = self._composeURL(self._joinURL(self.baseUrl, partial_url),
                                url_vars
                                )
-
-        if self.debug is True:
-            print "for debug purposes the url targetted is:"
-            print url
-            print "*" * 30
-
         response = None
 
         # combine to dictionaries without modifying either
@@ -78,9 +72,8 @@ class HttpClient(object):
         auth = self.auth
 
         # inject data with extras (apikey auth)
-        print data
         data.update(self.extras)
-        print data
+
         # if the form needs to be sent as json data
         if form_encoding:
             data = json.dumps(data)
@@ -88,16 +81,15 @@ class HttpClient(object):
         response = getattr(self, method)(url, data, built_headers, auth)
 
         if self.debug is True:
-            print "for debug purposes the url targetted is:"
-            print response.url
-            print "*" * 30
+            print "DEBUG: Preposed url: %s" % url
+            print "DEBUG: Client data: %s" % data
+            print "DEBUG: Actual target url: %s" % response.url
 
         processed_response = self._processResponse(response)
 
         return processed_response
 
     def get(self, url, data, headers, auth):
-        print data
         return self.session.get(url,
                                 params=data,
                                 headers=headers,
