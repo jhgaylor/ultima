@@ -165,22 +165,28 @@ class Endpoint(object):
 
     def call(self, *args, **kwargs):
         """
-        Entry point for url and data params
+        Entry point for url and data params. URL parameters
+        have priority over data payload
 
-        :ivar url_defaults: Optional positional argument defining default url named parameters.
         :ivar kwargs: payload for requests.
         """
         params = self._translate(kwargs)
-
-        if len(args) > 0:
-            url_params = self._translate(args[0])
-        else:
-            url_params = self.url_defaults
+        data_params = {}
+        url_params = self.url_defaults.copy()
+        # this merges url params dict and url defaults preferring
+        # the explicit value over the default
+        # while seperating the data parameters from the url parameters
+        for key, value in params.iteritems():
+            print key
+            if key in url_params.keys():
+                url_params[key] = value
+            else:
+                data_params[key] = value
 
         self._last_args = [self.url,
                            self.method,
                            self.headers,
-                           params,
+                           data_params,
                            url_params,
                            self.form_encoding
                            ]

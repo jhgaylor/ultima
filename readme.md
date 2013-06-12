@@ -1,4 +1,9 @@
+#Changes not reflected in document
+
+URL parameters and data payload are all **kwargs of endpoint.call.  they are seperated within the method using the values in self.url_defaults
+
 #What is it?
+
 A tool to process json into an api client
 
 #Why do I want it?
