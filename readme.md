@@ -2,6 +2,14 @@
 
 URL parameters and data payload are all **kwargs of endpoint.call.  they are seperated within the method using the values in self.url_defaults
 
+If you manually set ultima.network.endpoint._normalizer to a callable then essentially
+
+    ultima.network.endpoint()
+
+becomes
+
+    ultima.network.endpoint._normalizer(ultima.network.endpoint())
+
 #What is it?
 
 A tool to process json into an api client

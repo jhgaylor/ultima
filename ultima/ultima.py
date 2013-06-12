@@ -4,6 +4,10 @@ from .httpclient import HttpClient
 def _(s):
     return "_" + s
 
+def iscallable(x):
+    import collections
+    return isinstance(x, collections.Callable)
+
 
 class RequiredField(Exception):
     """
@@ -154,6 +158,9 @@ class Endpoint(object):
     def __init__(self, client, options):
         #TODO: remove unwanted keys from options?
         self.client = client
+        # _normalizer is a callable that returns a data structure matching a
+        # uniform structure across multiple data providers
+        self._normalizer = None  # This might be a good place for subclassing?
 
         options = self._fillDefaults(options)
 
@@ -174,7 +181,7 @@ class Endpoint(object):
         data_params = {}
         url_params = self.url_defaults.copy()
         # this merges url params dict and url defaults preferring
-        # the explicit value over the default
+        # the new values over the defaults
         # while seperating the data parameters from the url parameters
         for key, value in params.iteritems():
             print key
@@ -210,10 +217,13 @@ class Endpoint(object):
 
     def refresh(self):
         """
-        Sends the last request again.
+        Sends the prepped request (possibly again).
         """
         response = self.client.call(*self._last_args)
         processed_response = self._processResponse(response)
+
+        if iscallable(self._normalizer):
+            return self._normalizer(processed_response)
         return processed_response
 
     def _fillDefaults(self, options):
@@ -233,7 +243,7 @@ class Endpoint(object):
 
     def _processResponse(self, response):
         """
-        Update state from response
+        Update internal state from response
         """
         #TODO: let next and prev key contain . to drill down
         if self.nextKey in response:
