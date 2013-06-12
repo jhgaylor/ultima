@@ -155,6 +155,7 @@ class Endpoint(object):
 
     #: the required keys for the json input to construct an endpoint
     required_fields = ['url', 'method']
+
     def __init__(self, client, options):
         #TODO: remove unwanted keys from options?
         self.client = client
@@ -246,11 +247,35 @@ class Endpoint(object):
         Update internal state from response
         """
         #TODO: let next and prev key contain . to drill down
-        if self.nextKey in response:
-            self._next_url = response[self.next_key]
-        if self.prevKey in response:
-            self._prev_url = response[self.prev_key]
-        return response
+        #Patch for the above todo. Until marked, this code needs review
+        def drilldown(cursor, keys):
+            """
+            Crawls through a dictionary to a desired location indicated
+            by a list of keys.
+
+            If a key is not found it is just skipped and the iteration
+            continues
+
+            returns cursor[key1][key2]...
+            """
+            for key in keys:
+                if key in cursor:
+                    cursor = response[key]
+            return cursor
+
+        nextKeys = self.nextKey.split('.')
+        prevKeys = self.prevKey.split('.')
+
+        self._next_url = drilldown(response, nextKeys)
+        self._prev_url = drilldown(response, prevKeys)
+        #Mark end of review
+
+        # reviewed code replaces this block
+        # if self.nextKey in response:
+        #     self._next_url = response[self.next_key]
+        # if self.prevKey in response:
+        #     self._prev_url = response[self.prev_key]
+        # return response
 
     def _translate(self, options):
         """
